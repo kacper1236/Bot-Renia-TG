@@ -1,1 +1,8 @@
 python-telegram-bot
+python-dotenv~=1.0.1
+Flask~=3.0.2
+flask_admin
+psycopg2
+psycopg2-binary
+requests
+SQLAlchemy
