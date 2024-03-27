@@ -1,3 +1,4 @@
 from .BaseCommand import *
-from .CommandBuilder import *
 from .TestCommand import *
+from .CommandManager import *
+from .ManagedCommand import *

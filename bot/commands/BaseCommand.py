@@ -25,7 +25,6 @@ class BaseCommand(ABC):
         return CommandHandler(self.name, self.callback)
     
     @abstractmethod
-    @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
         '''
         Funkcja obsługująca daną komendę
