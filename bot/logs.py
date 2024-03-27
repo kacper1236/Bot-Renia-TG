@@ -1,5 +1,8 @@
 import logging.config
 
+from telegram import Update
+from telegram.ext import CallbackContext
+
 
 # jak potrzebne będzie coś bardziej customowe
 logging_config = {
@@ -31,3 +34,17 @@ logging_config = {
 logging.config.dictConfig(logging_config)
 
 logger = logging.getLogger('renia-bot')
+
+def error(update: Update, context: CallbackContext) -> None:
+    """
+    Handler obsługujący błędy.
+
+    Parameters
+    ----------
+    update
+        Obiekt `telegram.Update` posiadający informacje o requeście.
+    context
+        Obiekt `telegram.ext.CallbackContext`, który zawiera głównie podane argumenty.
+    """
+
+    logger.error(f'Renia napotkała błąd przy {update}: {context.error}')
