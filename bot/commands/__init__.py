@@ -2,8 +2,4 @@ from .BaseCommand import *
 from .TestCommand import *
 from .ManagedCommand import *
 from .HelpCommand import *
-from .HowMuchTimeToFutrolajkiCommand import *
-from .DiscordCommand import *
-from .DateCommand import *
-from .WebsiteCommand import *
 from .CommandManager import *

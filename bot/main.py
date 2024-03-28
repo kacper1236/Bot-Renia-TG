@@ -4,7 +4,7 @@ import os
 import sys
 
 from integrations import ReniaBackofficeClient
-from commands import TestCommand, CommandManager, HowMuchTimeToFutrolajkiCommand, HelpCommand, DateCommand, DiscordCommand, WebsiteCommand
+from commands import TestCommand, CommandManager, HelpCommand, UploadPhotoCommand
 from logs import logger, error
 
 def main():
@@ -18,6 +18,7 @@ def main():
         manager.setup([
             HelpCommand(manager),
             TestCommand(),
+            UploadPhotoCommand.UploadPhotoCommand(manager),
             *client.get_commands()
         ])
 
