@@ -1,6 +1,6 @@
 from typing import List
 from telegram.ext import Application
-from . import TestCommand, BaseCommand
+from . import BaseCommand
 
 class CommandManager:
 
@@ -8,12 +8,10 @@ class CommandManager:
         self.handlers = {}
         self.__app = app
 
-        commands: List[BaseCommand] = [TestCommand()]
-
+    def setup(self, commands: List[BaseCommand]):
         for command in commands:
             self.handlers[command.name] = command.get_handler()
-        
-        self.__app.add_handlers(self.handlers.values())
+            self.__app.add_handler(self.handlers[command.name])
     
     def add_command(self, command: BaseCommand):
         '''Dodanie/modyfikacja komendy'''

@@ -1,30 +1,27 @@
-from pip._internal.commands.help import HelpCommand
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CallbackContext
+from telegram.ext import ApplicationBuilder
 from dotenv import load_dotenv
 import os
 import sys
 
-from commands.DateCommand import DateCommand
-from commands.HowMuchTimeToFutrolajkiCommand import HowMuchTimeToFutrolajkiCommand
-from commands.WebsiteCommand import WebsiteCommand
-from commands.HelpCommand import HelpCommand
-from commands.DiscordCommand import DiscordCommand
-from commands import TestCommand
+from commands import TestCommand, CommandManager, HowMuchTimeToFutrolajkiCommand, HelpCommand, DateCommand, DiscordCommand, WebsiteCommand
 from logs import logger, error
-import requests
 
 def main():
     try:
         load_dotenv()
         app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).build()
 
-        app.add_handler(TestCommand().get_handler())
-        app.add_handler(HowMuchTimeToFutrolajkiCommand().get_handler())
-        app.add_handler(WebsiteCommand().get_handler())
-        app.add_handler(DiscordCommand().get_handler())
-        app.add_handler(DateCommand().get_handler())
-        app.add_handler(HelpCommand().get_handler())
+        manager = CommandManager(app)
+        
+        manager.setup([
+            HelpCommand(manager),
+            TestCommand(),
+            HowMuchTimeToFutrolajkiCommand(),
+            DateCommand(),
+            DiscordCommand(),
+            WebsiteCommand()
+        ])
+
         app.add_error_handler(error)
 
         logger.info("Renia jest włączona")

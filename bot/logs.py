@@ -47,4 +47,4 @@ def error(update: Update, context: CallbackContext) -> None:
         Obiekt `telegram.ext.CallbackContext`, który zawiera głównie podane argumenty.
     """
 
-    logger.error(f'Renia napotkała błąd przy {update}: {context.error}')
+    logger.error(f'Renia napotkała błąd: {context.error}')
