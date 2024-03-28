@@ -4,7 +4,7 @@ Codename: Renia, Telegram Bot Foxcons
 # Getting Started
 
 ## Prerequisites
- - Docker and docker-compose installed
+ - Docker and docker-compose installed as a programme, not install with pip
 
 ## Configuration
 In `docker-compose.yaml` replace `<TOKEN>` with **your** Telegram bot token
