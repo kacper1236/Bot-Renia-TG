@@ -15,7 +15,7 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d  # Mount the initdb directory
   renia-tg-bot:
     environment:
-      TG_TOKEN: "<TOKEN>"
+      TG_TOKEN: "7082432991:AAEbZzp9gSOJ97sBHJoXN-LSiUCWRPwa5yU"
     build: ./bot
     volumes:
       - ./logs:/logs
