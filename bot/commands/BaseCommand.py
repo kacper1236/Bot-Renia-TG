@@ -1,5 +1,6 @@
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext
 from logs import logger
@@ -15,6 +16,8 @@ def command_with_logs(func):
 class BaseCommand(ABC):
     name: str
     '''Nazwa komendy, wykorzystywana do przypisania komendy'''
+    description: str = None
+    '''Krótki opis komendy do /help'''
 
     def get_handler(self) -> CommandHandler:
         '''Komenda do przesyłania komendy do aplikacji
