@@ -1,6 +1,7 @@
-from telegram import Update, Message
-from telegram.ext import CallbackContext
+from telegram import Update
+from telegram.ext import CallbackContext, ContextTypes
 from . import BaseCommand, command_with_logs, CommandManager
+import os
 
 from datetime import datetime, timezone
 
@@ -9,11 +10,14 @@ class UploadPhotoCommand(BaseCommand):
     description = "Wyślij zdjęcia"
 
     @command_with_logs
-    async def callback(self, update: Update, context: Message):
-        await update.message.reply_text("Siema")
+    async def callback(self, update:Update, context:CallbackContext):
+        await update.message.reply_text("Rozpoczynam zapisywanie zdjęcia...")
         user_id = update.message.from_user.id
         timestamp = datetime.now().timestamp()
-        new_file = await context.effective_attachment[-1].get_file()
-        print(new_file)
-        await new_file.download_to_drive(custom_path=f"C:\\Users\\kacpe\\Documents\\GitHub\\Bot-Renia-TG\\photos\\{user_id}_{timestamp}.jpg")
+        new_file = await update.message.effective_attachment[-1].get_file()
+        print(os.getcwd())
+        print(os.listdir(".."))
+        await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{timestamp}.jpg"))
         await update.message.reply_text("Zdjęcie zostało zapisane")
+
+        #Koniecznie do poprawy, bo bez użycia komendy sam pobiera zdjęcie, ALE POBIERA JE TAM GDZIE POWINNO BYĆ

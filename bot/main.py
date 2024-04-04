@@ -18,7 +18,7 @@ def main():
         manager.setup([
             HelpCommand(manager),
             TestCommand(),
-            UploadPhotoCommand.UploadPhotoCommand(),
+            UploadPhotoCommand(),
             *client.get_commands()
         ])
 
