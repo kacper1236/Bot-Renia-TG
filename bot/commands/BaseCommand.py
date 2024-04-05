@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from telegram import Update
-from telegram.ext import CommandHandler, CallbackContext, MessageHandler, filters
+from telegram.ext import BaseHandler, CommandHandler, CallbackContext, MessageHandler, filters
 from logs import logger
 
 def command_with_logs(func):
@@ -19,21 +19,14 @@ class BaseCommand(ABC):
     description: str = None
     '''Krótki opis komendy do /help'''
 
-    def get_handler_CommandHandler(self) -> CommandHandler:
+    @abstractmethod
+    def get_handler(self) -> BaseHandler:
         '''Komenda do przesyłania komendy do aplikacji
 
         Returns:
         CommandHandler: handler do komendy bota
         '''
-        return CommandHandler(self.name, self.callback)
-    
-    def get_handler_MessageHandler(self) -> MessageHandler:
-        '''Komenda do przesyłania komendy do aplikacji
-
-        Returns:
-        MessageHandler: handler do zdjęć i wideo + wiadomości
-        '''
-        return MessageHandler(filters.VIDEO | filters.PHOTO | filters.TEXT, self.callback)
+        pass
 
     @abstractmethod
     async def callback(self, update: Update, context: CallbackContext):
@@ -46,3 +39,11 @@ class BaseCommand(ABC):
 
         '''
         pass
+
+class SlashCommand(BaseCommand):
+    def get_handler(self) -> BaseHandler:
+        return CommandHandler(self.name, self.callback)
+
+class MessageCommand(BaseCommand):
+    def get_handler(self) -> BaseHandler:
+        return MessageHandler(filters.VIDEO | filters.PHOTO | filters.TEXT, self.callback)
