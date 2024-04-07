@@ -1,18 +1,17 @@
 from pyrogram import Client
-from dotenv import load_dotenv
-
+from pathlib import Path
 import os
 
 class TesterClinet:
 
     @staticmethod
-    def init() -> Client:
+    def init(dir: Path) -> Client:
         '''
         Inicjalizacja klienta API Telegrama.
         '''
-        load_dotenv()
         return Client(
             'TesterClient',
             os.environ.get('TESTER_API_ID'),
-            os.environ.get('TESTER_API_HASH')
+            os.environ.get('TESTER_API_HASH'),
+            workdir=dir
         )
