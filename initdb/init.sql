@@ -14,4 +14,5 @@ INSERT INTO Config (name, value, description) VALUES
     ('howMuchTimeToFutrolajki', '621', 'a'),
     ('date', '6.2.1', 'a'),
     ('discord', 'abc', 'a'),
-    ('website', 'https://futrolajki.pl/', 'a');
+    ('website', 'https://futrolajki.pl/', 'a'),
+    ('program', 'https://futrolajki.pl/', 'a');
