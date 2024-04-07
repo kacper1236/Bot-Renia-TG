@@ -8,7 +8,7 @@ from logs import logger
 
 
 class ReniaBackofficeClient:
-    url = 'http://renia-tg-backend:5000'
+    url = 'http://renia-tg-backend:5001'
 
     def get_commands(self) -> List[BaseCommand]:
         res = requests.get(f'{self.url}/configs')
