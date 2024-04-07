@@ -23,7 +23,7 @@ class CommandManager:
         self.__app.add_handler(handler)
             
     def remove_command(self, name: str):
-        '''Ununięcie komendy'''
+        '''Usunięcie komendy'''
         self.__app.remove_handler(self.handlers[name])
         self.handlers.pop(name)
         self.descriptions.pop(name)

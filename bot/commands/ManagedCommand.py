@@ -1,8 +1,8 @@
 from telegram import Update
 from telegram.ext import CallbackContext
-from . import BaseCommand, command_with_logs
+from . import SlashCommand, command_with_logs
 
-class ManagedCommand(BaseCommand):
+class ManagedCommand(SlashCommand):
     '''
     Komenda ustawiana poprzes UI Administratorskie
     '''

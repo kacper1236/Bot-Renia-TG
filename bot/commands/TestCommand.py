@@ -1,9 +1,9 @@
 
 from telegram import Update
 from telegram.ext import CallbackContext
-from . import BaseCommand, command_with_logs
+from . import SlashCommand, command_with_logs
 
-class TestCommand(BaseCommand):
+class TestCommand(SlashCommand):
     name = 'hello'
 
     @command_with_logs

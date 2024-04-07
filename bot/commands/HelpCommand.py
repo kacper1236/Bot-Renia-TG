@@ -1,9 +1,9 @@
 
 from telegram import Update
 from telegram.ext import CallbackContext
-from . import BaseCommand, command_with_logs, CommandManager
+from . import SlashCommand, command_with_logs, CommandManager
 
-class HelpCommand(BaseCommand):
+class HelpCommand(SlashCommand):
     name = 'help'
     description = 'pokaż wszystkie komendy'
 

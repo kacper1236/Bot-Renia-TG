@@ -1,11 +1,11 @@
 from telegram import Update
-from telegram.ext import CallbackContext, ContextTypes
-from . import BaseCommand, command_with_logs, CommandManager
+from telegram.ext import CallbackContext
+from . import MessageCommand, command_with_logs
 import os
 
 from datetime import datetime, timezone
 
-class UploadPhotoCommand(BaseCommand):
+class UploadPhotoCommand(MessageCommand):
     name = "zdjecia"
     description = "Wyślij zdjęcia"
 
