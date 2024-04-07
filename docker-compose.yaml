@@ -16,7 +16,7 @@ services:
   renia-tg-bot:
     restart: always
     environment:
-      TG_TOKEN: "token2"
+      TG_TOKEN: ${TG_TOKEN}
     build: ./bot
     volumes:
       - ./logs:/logs
