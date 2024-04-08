@@ -23,7 +23,7 @@ logging_config = {
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "simple",
-            "filename": "../logs/renia.log",
+            "filename": "/var/log/renia/renia.log",
             "encoding": "utf8"
         }
     },

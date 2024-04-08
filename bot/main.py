@@ -1,11 +1,12 @@
+#!/usr/bin/env python3
 from telegram.ext import ApplicationBuilder
 from dotenv import load_dotenv
 import os
 import sys
 
-from integrations import ReniaBackofficeClient
-from commands import TestCommand, CommandManager, HelpCommand, UploadPhotoCommand
-from logs import logger, error
+from renia_bot.integrations import ReniaBackofficeClient
+from renia_bot.commands import TestCommand, CommandManager, HelpCommand, UploadPhotoCommand
+from renia_bot.logs import logger, error
 
 def main():
     try:
@@ -14,7 +15,7 @@ def main():
 
         manager = CommandManager(app)
         client = ReniaBackofficeClient()
-        
+
         manager.setup([
             HelpCommand(manager),
             TestCommand(),
@@ -25,7 +26,7 @@ def main():
         app.add_error_handler(error)
 
         logger.info("Renia jest włączona")
-     
+
         app.run_polling() # wątek blokuje się na tym
     except KeyboardInterrupt:
         sys.exit(1)

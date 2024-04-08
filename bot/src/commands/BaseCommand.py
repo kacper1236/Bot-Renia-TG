@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from telegram import Update
 from telegram.ext import BaseHandler, CommandHandler, CallbackContext, MessageHandler, filters, ConversationHandler
-from logs import logger
+from renia_bot.logs import logger
 from typing import List, Dict
 
 def command_with_logs(func):

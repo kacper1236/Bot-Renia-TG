@@ -10,6 +10,7 @@ class UploadPhotoCommand(ConversationCommand):
     name = "zdjecia"
     description = "Wyślij zdjęcia"
     state_names = [SAVE]
+    miejsce_na_zdjecia = '/var/lib/photos'
 
     @command_with_logs
     async def start(self, update: Update, context: CallbackContext) -> int:
@@ -26,7 +27,7 @@ class UploadPhotoCommand(ConversationCommand):
         new_file = await update.message.effective_attachment[-1].get_file()
         print(os.getcwd())
         print(os.listdir(".."))
-        await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{timestamp}.jpg"))
+        await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"{miejsce_na_zdjecia}/{user_id}_{timestamp}.jpg"))
         await update.message.reply_text("Zdjęcie zostało zapisane")
         return ConversationHandler.END
 
@@ -63,7 +64,7 @@ class UploadPhotoCommand(ConversationCommand):
     #     new_file = await update.message.effective_attachment[-1].get_file()
     #     print(os.getcwd())
     #     print(os.listdir(".."))
-    #     await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{timestamp}.jpg"))
+    #     await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"{miejsce_na_zdjecia}/{user_id}_{timestamp}.jpg"))
     #     await update.message.reply_text("Zdjęcie zostało zapisane")
 
         #Koniecznie do poprawy, bo bez użycia komendy sam pobiera zdjęcie, ALE POBIERA JE TAM GDZIE POWINNO BYĆ
