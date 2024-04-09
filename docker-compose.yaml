@@ -1,8 +1,11 @@
 version: '3.8'
 
+volumes:
+  postgresql:
+
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:16.2@sha256:0df4feaa20162e5659ca29f073a72f0e519611a59e91283b4dd4dceba390a43b
     container_name: my-postgres
     environment:
       POSTGRES_DB: my_database
@@ -11,24 +14,23 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data:/var/lib/postgresql/data
-      - ./initdb:/docker-entrypoint-initdb.d  # Mount the initdb directory
+      - postgresql:/var/lib/postgresql
+      - ./initdb:/docker-entrypoint-initdb.d
+
   renia-tg-bot:
     restart: always
     environment:
       TG_TOKEN: ${TG_TOKEN}
     build: ./bot
     volumes:
-      - ./logs:/logs
-      - ./photos:/photos
+      - ./logs:/var/log/renia
+      - ./photos:/var/lib/photos
 
   renia-tg-backend:
     build: ./backend
     restart: always
     ports:
       - "5001:5001"
-    volumes:
-      - ./backend:/backend
     depends_on:
       - postgres
 

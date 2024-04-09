@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy

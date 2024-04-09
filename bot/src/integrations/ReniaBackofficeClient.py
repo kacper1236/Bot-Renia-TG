@@ -3,8 +3,8 @@ from typing import List
 import requests
 import json
 
-from commands import BaseCommand, ManagedCommand
-from logs import logger
+from renia_bot.commands import BaseCommand, ManagedCommand
+from renia_bot.logs import logger
 
 
 class ReniaBackofficeClient:
