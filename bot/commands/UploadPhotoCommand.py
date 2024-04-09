@@ -11,6 +11,8 @@ class UploadPhotoCommand(ConversationCommand):
     description = "Wyślij zdjęcia"
     state_names = [SAVE]
 
+    filter = filters.PHOTO | filters.VIDEO & ~filters.COMMAND
+
     @command_with_logs
     async def start(self, update: Update, context: CallbackContext) -> int:
         print("start")
@@ -33,18 +35,12 @@ class UploadPhotoCommand(ConversationCommand):
     @command_with_logs
     async def entry_points(self, update: Update, context: CallbackContext):
         print("entry_points")
-        return [SlashCommand("zdjecia", self.start)]
-    
-    @command_with_logs
-    async def filter(self):
-        return filters.PHOTO | filters.VIDEO & ~filters.COMMAND
+        return SlashCommand(self.name, self.start)
 
     @command_with_logs
     async def states(self, update: Update, context: CallbackContext):
         print("states")
-        return {
-            self.SAVE: [MessageCommand(self.filter, self.save)]
-        }
+        return {self.SAVE: MessageCommand(self.filter, self.save)}
     
     @command_with_logs
     async def fallbacks(self, update: Update, context: CallbackContext):

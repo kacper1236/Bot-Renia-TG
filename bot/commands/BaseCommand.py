@@ -45,17 +45,7 @@ class SlashCommand(BaseCommand):
         return CommandHandler(self.name, self.callback)
 
 class MessageCommand(BaseCommand):
-
-    @abstractmethod
-    async def filter(self):
-        '''
-        Należy dodać filtry do wyszukiwania odpowiednich wiadomości
-        przykład: filters.PHOTO | filters.VIDEO | filters.TEXT
-        | - OR
-        & - AND
-        ~ - NOT
-        '''
-        pass
+    filter : filters
 
     def get_handler(self) -> BaseHandler:
         return MessageHandler(self.filter, self.callback)
