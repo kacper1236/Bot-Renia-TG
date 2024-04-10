@@ -1,14 +1,20 @@
 # Use the official Python image as the base image
-FROM python:3.9-slim
+FROM nikolaik/python-nodejs:latest
+# FROM python:3.9-slim
 
 # Set the working directory in the container
-WORKDIR /main
+WORKDIR /bot
 
-# Copy the application files to the container
-COPY . /main
+COPY requirements.txt  /bot
 
 # Install dependencies
-RUN pip install --no-cache-dir -r ./requirements.txt
+RUN pip install --no-cache-dir -r ./requirements.txt                   
+
+# Install nodemon globally
+RUN npm install -g nodemon
+
+# Copy the application files to the container
+# COPY . /bot
 
 # Command to run the application
-CMD ["python", "main.py"]
+CMD ["nodemon", "-L", "--exec", "python", "main.py"]
