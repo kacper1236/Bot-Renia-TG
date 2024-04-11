@@ -1,17 +1,17 @@
 from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, filters
+from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, filters, MessageHandler
 from . import ConversationCommand, command_with_logs, MessageCommand, SlashCommand
 import os
 
 from datetime import datetime
 
 class UploadPhotoCommand(ConversationCommand):
-    SAVE = range(1)
+    SAVE = 1
     name = "zdjecia"
     description = "Wyślij zdjęcia"
     state_names = [SAVE]
 
-    filter = filters.PHOTO | filters.VIDEO & ~filters.COMMAND
+    filter = filters.PHOTO | filters.VIDEO
 
     @command_with_logs
     async def start(self, update: Update, context: CallbackContext) -> int:
@@ -21,29 +21,29 @@ class UploadPhotoCommand(ConversationCommand):
 
     @command_with_logs
     async def save(self, update: Update, context: CallbackContext) -> int:
-        print("save")
-        await update.message.reply_text("Rozpoczynam zapisywanie zdjęcia...")
-        user_id = update.message.from_user.id
-        timestamp = datetime.now().timestamp()
-        new_file = await update.message.effective_attachment[-1].get_file()
-        print(os.getcwd())
-        print(os.listdir(".."))
-        await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{timestamp}.jpg"))
-        await update.message.reply_text("Zdjęcie zostało zapisane")
-        return ConversationHandler.END
+        try:
+            print("save")
+            await update.message.reply_text("Rozpoczynam zapisywanie zdjęcia...")
+            user_id = update.message.from_user.id
+            timestamp = datetime.now().timestamp()
+            new_file = await update.message.effective_attachment[-1].get_file()
+            await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{timestamp}.jpg"))
+            await update.message.reply_text("Zdjęcie zostało zapisane")
+            return ConversationHandler.END
+        except Exception as e:
+            print(e)
+            await update.message.reply_text("Wystąpił błąd podczas zapisywania zdjęcia")
+            return ConversationHandler.END
 
-    @command_with_logs
-    async def entry_points(self, update: Update, context: CallbackContext):
+    def entry_points(self):
         print("entry_points")
-        return SlashCommand(self.name, self.start)
+        return CommandHandler(self.name, self.start)
 
-    @command_with_logs
-    async def states(self, update: Update, context: CallbackContext):
+    def states(self):
         print("states")
-        return {self.SAVE: MessageCommand(self.filter, self.save)}
+        return {self.SAVE: [MessageHandler(self.filter, self.save)]}
     
-    @command_with_logs
-    async def fallbacks(self, update: Update, context: CallbackContext):
+    def fallbacks(self):
         print("fallbacks")
         return []
     

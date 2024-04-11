@@ -53,14 +53,15 @@ class MessageCommand(BaseCommand):
 class ConversationCommand(BaseCommand):
 
     def get_handler(self) -> BaseHandler:
+        print({state: [commands] for state, commands in self.states().items()})
         return ConversationHandler(
-            entry_points=[self.entry_points],
-            states={state_name: [self.states] for state_name in self.state_names},
-            fallbacks=[self.fallbacks]
+            entry_points=[self.entry_points()],
+            states={state: commands for state, commands in self.states().items()},
+            fallbacks=[self.fallbacks()]
         )
 
     @abstractmethod
-    async def entry_points(self, update: Update, context: CallbackContext) -> List[BaseCommand]:
+    def entry_points(self) -> List[BaseHandler]:
         '''
         Funkcja obsługująca wejście do konwersacji
 
@@ -72,7 +73,7 @@ class ConversationCommand(BaseCommand):
         pass
 
     @abstractmethod
-    async def states(self, update: Update, context: CallbackContext) -> Dict[int, List[BaseCommand]]:
+    def states(self) -> Dict[int, List[BaseHandler]]:
         '''
         Funkcja obsługująca stan konwersacji
 
@@ -84,7 +85,7 @@ class ConversationCommand(BaseCommand):
         pass
     
     @abstractmethod
-    async def fallbacks(self, update: Update, context: CallbackContext) -> List[BaseCommand]:
+    def fallbacks(self) -> List[BaseHandler]:
         '''
         Funkcja obsługująca listę programów obsługi, które mogą zostać użyte w konwersacji
 
