@@ -21,6 +21,7 @@ services:
     volumes:
       - ./logs:/logs
       - ./photos:/photos
+      - ./bot:/bot/
 
   renia-tg-backend:
     build: ./backend
