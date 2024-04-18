@@ -53,7 +53,6 @@ class MessageCommand(BaseCommand):
 class ConversationCommand(BaseCommand):
 
     def get_handler(self) -> BaseHandler:
-        print({state: [commands] for state, commands in self.states().items()})
         return ConversationHandler(
             entry_points=[self.entry_points()],
             states={state: commands for state, commands in self.states().items()},
