@@ -2,7 +2,7 @@ import logging.config
 
 from telegram import Update
 from telegram.ext import CallbackContext
-import traceback
+import traceback #https://docs.python.org/3/library/traceback.html standardowa bibliotka pythona
 
 
 # jak potrzebne będzie coś bardziej customowe

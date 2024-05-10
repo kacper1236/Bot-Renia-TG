@@ -54,9 +54,9 @@ class ConversationCommand(BaseCommand):
 
     def get_handler(self) -> BaseHandler:
         return ConversationHandler(
-            entry_points=[self.entry_points()],
+            entry_points=self.entry_points(),
             states={state: commands for state, commands in self.states().items()},
-            fallbacks=[self.fallbacks()]
+            fallbacks=self.fallbacks()
         )
 
     @abstractmethod

@@ -36,7 +36,7 @@ class UploadPhotoCommand(ConversationCommand):
         return ConversationHandler.END
 
     def entry_points(self):
-        return CommandHandler(self.name, self.start)
+        return [CommandHandler(self.name, self.start)]
 
     def states(self):
         return {
@@ -44,7 +44,7 @@ class UploadPhotoCommand(ConversationCommand):
         }
     
     def fallbacks(self):
-        return CommandHandler("end", self.end)
+        return [CommandHandler("end", self.end)]
     
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
