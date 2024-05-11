@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, filters, MessageHandler
-from . import ConversationCommand, command_with_logs, MessageCommand, SlashCommand
+from . import ConversationCommand, command_with_logs
 import os
 from logs import logger
 
@@ -12,7 +12,6 @@ class UploadPhotoCommand(ConversationCommand):
     description = "Wyślij zdjęcia"
 
     filter = filters.PHOTO | filters.VIDEO | filters.COMMAND | filters.TEXT
-    #filter = filters.ALL
 
     async def start(self, update: Update, context: CallbackContext) -> int:
         logger.info(f"Użytkownik {update.message.from_user.id} wywołał komendę /zapisz")
