@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from telegram import Update
-from telegram.ext import BaseHandler, CommandHandler, CallbackContext, MessageHandler, filters
+from telegram.ext import BaseHandler, CommandHandler, CallbackContext, MessageHandler, filters, ConversationHandler
 from logs import logger
+from typing import List, Dict
 
 def command_with_logs(func):
     '''Dekorator do logowania info'''
@@ -44,5 +45,54 @@ class SlashCommand(BaseCommand):
         return CommandHandler(self.name, self.callback)
 
 class MessageCommand(BaseCommand):
+    filter : filters
+
     def get_handler(self) -> BaseHandler:
-        return MessageHandler(filters.VIDEO | filters.PHOTO | filters.TEXT, self.callback)
+        return MessageHandler(self.filter, self.callback)
+    
+class ConversationCommand(BaseCommand):
+
+    def get_handler(self) -> BaseHandler:
+        return ConversationHandler(
+            entry_points=self.entry_points(),
+            states={state: commands for state, commands in self.states().items()},
+            fallbacks=self.fallbacks()
+        )
+
+    @abstractmethod
+    def entry_points(self) -> List[BaseHandler]:
+        '''
+        Funkcja obsługująca wejście do konwersacji
+
+        Parameters:
+        update: obiekt `Update`
+        context: kontekst callbacku
+
+        '''
+        pass
+
+    @abstractmethod
+    def states(self) -> Dict[int, List[BaseHandler]]:
+        '''
+        Funkcja obsługująca stan konwersacji
+
+        Parameters:
+        update: obiekt `Update`
+        context: kontekst callbacku
+
+        '''
+        pass
+    
+    @abstractmethod
+    def fallbacks(self) -> List[BaseHandler]:
+        '''
+        Funkcja obsługująca listę programów obsługi, które mogą zostać użyte w konwersacji
+
+        Parameters:
+        update: obiekt `Update`
+        context: kontekst callbacku
+
+        '''
+        pass
+
+ 

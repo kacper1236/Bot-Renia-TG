@@ -2,6 +2,7 @@ import logging.config
 
 from telegram import Update
 from telegram.ext import CallbackContext
+import traceback #https://docs.python.org/3/library/traceback.html standardowa bibliotka pythona
 
 
 # jak potrzebne będzie coś bardziej customowe
@@ -46,5 +47,8 @@ def error(update: Update, context: CallbackContext) -> None:
     context
         Obiekt `telegram.ext.CallbackContext`, który zawiera głównie podane argumenty.
     """
-
-    logger.error(f'Renia napotkała błąd: {context.error}')
+    tb = traceback.format_exception(etype=type(context.error), value=context.error, tb=context.error.__traceback__)
+    error_message = ''.join(tb)
+    logger.error(f'Błąd: {error_message}')
+    #logger.error(f'Update {update} wywołał błąd: {context.error}')
+    #logger.error(f'Renia napotkała błąd: {context.error}')
