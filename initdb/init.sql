@@ -11,7 +11,6 @@ CREATE TABLE Config (
 
 -- Insert initial data into the Config table
 INSERT INTO Config (name, value, description) VALUES
-    ('howMuchTimeToFutrolajki', '621', 'a'),
     ('date', '6.2.1', 'a'),
     ('discord', 'abc', 'a'),
     ('website', 'https://futrolajki.pl/', 'a'),

@@ -22,6 +22,8 @@ services:
       - ./logs:/logs
       - ./photos:/photos
       - ./bot:/bot/
+    depends_on:
+      - renia-tg-backend
 
   renia-tg-backend:
     build: ./backend
