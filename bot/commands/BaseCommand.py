@@ -19,14 +19,13 @@ class BaseCommand(ABC):
     description: str = None
     '''Krótki opis komendy do /help'''
 
-    @abstractmethod
-    def get_handler(self) -> BaseHandler:
+    def get_handler(self) -> CommandHandler:
         '''Komenda do przesyłania komendy do aplikacji
 
         Returns:
         CommandHandler: handler do komendy bota
         '''
-        pass
+        return CommandHandler(self.name, self.callback)
 
     @abstractmethod
     async def callback(self, update: Update, context: CallbackContext):
