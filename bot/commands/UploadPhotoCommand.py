@@ -26,6 +26,8 @@ class UploadPhotoCommand(ConversationCommand):
             new_file = await file.get_file()
             await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{datetime.now().timestamp()}.jpg"))
         except Exception as e:
+            if update.message.text == "/end":
+                return await self.end(update, context)
             logger.error(f"Podczas zapisywania zdjęcia wystąpił błąd: {e}")
             await update.message.reply_text("To nie jest zdjęcie, komenda przerwana")
             return ConversationHandler.END

@@ -23,4 +23,4 @@ CREATE TABLE config (
 
 -- Insert initial data into the config table
 INSERT INTO config (name, value, description) VALUES
-    ('photo_upload', '0', '0 lub 1 w zaleznosci czy komendia /zdjecia do uploadowania zdjec ma byc aktywna');
+    ('photo_upload', '1', '0 lub 1 w zaleznosci czy komendia /zdjecia do uploadowania zdjec ma byc aktywna');
