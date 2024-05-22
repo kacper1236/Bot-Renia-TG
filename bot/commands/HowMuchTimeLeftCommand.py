@@ -1,10 +1,11 @@
 from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler
-from . import command_with_logs, BaseCommand
+from telegram.ext import CallbackContext
+from . import command_with_logs, SlashCommand
 import requests
 import datetime
 
-class HowMuchTimeLeftCommand(BaseCommand):
+
+class HowMuchTimeLeftCommand(SlashCommand):
     name = 'ileDoFutrolajek'
 
     @command_with_logs
