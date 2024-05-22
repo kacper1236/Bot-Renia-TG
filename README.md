@@ -66,4 +66,4 @@ To execute tests, run `make test`. The test will ask you for you to log in and i
 
 # Common problems
 ## Backend not starting: `exec ./start_server.sh: no such file or directory`
-Make sure the `backend/dockerfile` file has **LF** encoding
+Make sure the `backend/dockerfile` file has **LF** separator set
