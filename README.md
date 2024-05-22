@@ -63,3 +63,7 @@ To execute tests, run `make test`. The test will ask you for you to log in and i
  - If you want to drop database with existing configurations just delete data directory (you can use `sudo -rf data` or `make clear_db`) when docker containers are **not** running
  - You can edit configs at http://127.0.0.1:5001/admin/config/ 
 ![admin_panel.png](docs%2Fadmin_panel.png)
+
+# Common problems
+## Backend not starting: `exec ./start_server.sh: no such file or directory`
+Make sure the `backend/dockerfile` file has **LF** encoding
