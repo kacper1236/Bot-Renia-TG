@@ -21,9 +21,6 @@ def main():
             *ReniaBackendClient.get_commands()
         ]
         enable_photo_command = requests.get(f'http://renia-tg-backend:5001/configs/photo_upload').text
-        print('-----------')
-        print(enable_photo_command)
-        print('-----------')
         if enable_photo_command == '1':
             availableCommands.append(UploadPhotoCommand())
 
