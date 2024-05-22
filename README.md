@@ -1,10 +1,16 @@
 # Bot-Renia-TG
 Codename: Renia, Telegram Bot Foxcons
+Project contains:
+ - Telegram bot
+ - Backend (written with python3 + flask)
+ - PostgreSQL 
+
+All shall be run using docker-compose.
 
 # Getting Started
 
 ## Prerequisites
- - Docker and docker-compose installed as a programme, not install with pip
+ - Docker and docker-compose installed as a programme, not installed with pip
 
 ## Configuration
 
@@ -12,7 +18,7 @@ Create `.env` file in root project directory and create an env variable called `
 
 ## Running
 
-If you have makefile configured, run `make start`. You can individualy build and run, using `build` and `run` commands.
+If you have makefile configured, run `make start`. You can individually build and run, using `build` and `run` commands, or with docker-compose:
 
 1. First:
 ```
@@ -35,6 +41,11 @@ Or
 
 ```
 make stop
+```
+
+### To remove database (e.g. if you want to recreate it). Run only if containers are **not** running
+```
+sudo rm -rf data
 ```
 
 ## Testing
