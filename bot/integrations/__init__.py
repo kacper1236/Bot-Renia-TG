@@ -1,1 +1,1 @@
-from .ReniaBackofficeClient import *
+from .ReniaBackendClient import *

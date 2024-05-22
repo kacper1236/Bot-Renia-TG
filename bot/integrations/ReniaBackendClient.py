@@ -7,14 +7,15 @@ from commands import BaseCommand, ManagedCommand
 from logs import logger
 
 
-class ReniaBackofficeClient:
+class ReniaBackendClient:
     url = 'http://renia-tg-backend:5001'
 
-    def get_commands(self) -> List[BaseCommand]:
-        res = requests.get(f'{self.url}/configs')
+    @staticmethod
+    def get_commands() -> List[BaseCommand]:
+        res = requests.get(f'{ReniaBackendClient.url}/simple-commands')
 
         if res.status_code != 200:
-            raise requests.RequestException(f'Backoffice odpowiedział kodem {res.status_code} ({res.reason})')
+            raise requests.RequestException(f'Backend odpowiedział kodem {res.status_code} ({res.reason})')
         
         commands = [ManagedCommand(**data) for data in json.loads(res.text)['result']]
 

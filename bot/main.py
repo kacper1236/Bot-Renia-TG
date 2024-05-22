@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import sys
 
-from integrations import ReniaBackofficeClient
+from integrations import ReniaBackendClient
 from commands import TestCommand, CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand
 from logs import logger, error
 
@@ -13,13 +13,12 @@ def main():
         app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).build()
 
         manager = CommandManager(app)
-        client = ReniaBackofficeClient()
         manager.setup([
             HelpCommand(manager),
             HowMuchTimeLeftCommand(),
             TestCommand(),
             UploadPhotoCommand(),
-            *client.get_commands()
+            *ReniaBackendClient.get_commands()
         ])
 
         app.add_error_handler(error)

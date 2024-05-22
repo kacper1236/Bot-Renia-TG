@@ -1,5 +1,6 @@
 from telegram import Update
 from telegram.ext import CallbackContext
+import requests
 from . import SlashCommand, command_with_logs
 
 class ManagedCommand(SlashCommand):
@@ -14,5 +15,6 @@ class ManagedCommand(SlashCommand):
 
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
-        await update.message.reply_text(self.text) 
+        resultFromBackend= requests.get(f'http://renia-tg-backend:5001/simple-commands/{self.name}').text
+        await update.message.reply_text(resultFromBackend)
             
