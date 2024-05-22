@@ -6,6 +6,7 @@ import sys
 from integrations import ReniaBackendClient
 from commands import TestCommand, CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand
 from logs import logger, error
+import requests
 
 def main():
     try:
@@ -13,14 +14,20 @@ def main():
         app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).build()
 
         manager = CommandManager(app)
-        manager.setup([
+        availableCommands = [
             HelpCommand(manager),
             HowMuchTimeLeftCommand(),
             TestCommand(),
-            UploadPhotoCommand(),
             *ReniaBackendClient.get_commands()
-        ])
+        ]
+        enable_photo_command = requests.get(f'http://renia-tg-backend:5001/configs/photo_upload').text
+        print('-----------')
+        print(enable_photo_command)
+        print('-----------')
+        if enable_photo_command == '1':
+            availableCommands.append(UploadPhotoCommand())
 
+        manager.setup(availableCommands)
         app.add_error_handler(error)
 
         logger.info("Renia jest włączona")

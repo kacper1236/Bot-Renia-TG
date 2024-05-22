@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from telegram import Update
 from telegram.ext import BaseHandler, CommandHandler, CallbackContext, MessageHandler, filters, ConversationHandler
 from logs import logger

@@ -26,7 +26,15 @@ class SimpleCommand(db.Model):
     description = db.Column(db.String(120), unique=False, nullable=False)
 
 
+class Config(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+    value = db.Column(db.String(120), unique=False, nullable=False)
+    description = db.Column(db.String(120), unique=False, nullable=False)
+
+
 admin.add_view(ModelView(SimpleCommand, db.session))
+admin.add_view(ModelView(Config, db.session))
 db.init_app(app)
 
 
@@ -49,7 +57,16 @@ def get_users(name):
     result = db.session.query(SimpleCommand).filter_by(name=name).first()
     if result is not None:
         return result.value
-    return "No informations yet"
+    return "No information yet"
+
+
+@app.route('/configs/<name>')
+def get_config(name):
+    result = db.session.query(Config).filter_by(name=name).first()
+    if result is not None:
+        return result.value
+    return "No config found"
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
