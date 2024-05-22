@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Copy the application files to the container
 COPY . /app
+RUN chmod +x /app/start_server.sh
 
 # Install dependencies
 RUN \
@@ -17,5 +18,4 @@ RUN \
 # Expose the port the application runs on
 EXPOSE 5001
 
-# Command to run the application
-CMD ["python", "app.py"]
+ENTRYPOINT ["./start_server.sh"]

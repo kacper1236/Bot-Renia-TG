@@ -3,3 +3,4 @@ flask_admin
 psycopg2
 psycopg2-binary
 flask_sqlalchemy
+gunicorn~=22.0.0
