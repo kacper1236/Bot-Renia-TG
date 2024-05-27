@@ -7,7 +7,7 @@ from logs import logger
 from datetime import datetime
 
 class UploadPhotoCommand(ConversationCommand):
-    SAVE = 0
+    SAVE = "ZAPISZ_ZDJECIA"
     name = "zdjecia"
     description = "Wyślij zdjęcia"
 
@@ -29,8 +29,7 @@ class UploadPhotoCommand(ConversationCommand):
             if update.message.text == "/end":
                 return await self.end(update, context)
             logger.error(f"Podczas zapisywania zdjęcia wystąpił błąd: {e}")
-            await update.message.reply_text("To nie jest zdjęcie, komenda przerwana")
-            return ConversationHandler.END
+            await update.message.reply_text("To nie jest zdjęcie, spróbuj ponownie\n Aby zakończyć zapisywanie napisz /end")
     
     async def end(self, update: Update, context: CallbackContext) -> int:
         await update.message.reply_text("Zakończono zapisywanie zdjęć")
