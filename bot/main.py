@@ -2,30 +2,27 @@ from telegram.ext import ApplicationBuilder
 from dotenv import load_dotenv
 import os
 import sys
-
 from integrations import ReniaBackendClient
-from commands import TestCommand, CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand, DatabasePersistence
+from commands import CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand
 from logs import logger, error
-import requests
+
 
 def main():
     try:
         load_dotenv()
         persistence = DatabasePersistence()
         app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).persistence(persistence).build()
-        
+
         manager = CommandManager(app)
-        availableCommands = [
+        available_commands = [
             HelpCommand(manager),
             HowMuchTimeLeftCommand(),
-            TestCommand(),
             *ReniaBackendClient.get_commands()
         ]
-        enable_photo_command = requests.get(f'http://renia-tg-backend:5001/configs/photo_upload').text
-        if enable_photo_command == '1':
-            availableCommands.append(UploadPhotoCommand())
+        if ReniaBackendClient.should_enable_photo_command() == '1':
+            available_commands.append(UploadPhotoCommand())
 
-        manager.setup(availableCommands)
+        manager.setup(available_commands)
         app.add_error_handler(error)
 
         logger.info("Renia jest włączona")

@@ -8,10 +8,9 @@ CREATE TABLE simple_command (
 
 -- Insert initial data into the simple_command table
 INSERT INTO simple_command (name, value, description) VALUES
-    ('date', '6.2.1', 'a'),
-    ('discord', 'abc', 'a'),
-    ('website', 'https://futrolajki.pl/', 'a'),
-    ('program', 'https://futrolajki.pl/', 'a');
+    ('date', '13–17.11.2024', 'Data futrołajek'),
+    ('website', 'https://futrolajki.pl/', 'Strona konwentu'),
+    ('program', 'https://futrolajki.pl/', 'Program konwentu');
 
 -- Create the config table
 CREATE TABLE config (

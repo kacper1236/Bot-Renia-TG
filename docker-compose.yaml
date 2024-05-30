@@ -23,6 +23,9 @@ services:
       - ./photos:/photos
       - ./bot:/bot/
       - ./DatabasePersistenceJson:/DatabasePersistenceJson
+    env_file:
+      - path: .env
+        required: true
     depends_on:
       - renia-tg-backend
 
@@ -33,6 +36,9 @@ services:
       - "5001:5001"
     volumes:
       - ./backend:/backend
+    env_file:
+      - path: .env
+        required: true
     depends_on:
       - postgres
 
