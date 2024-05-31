@@ -17,7 +17,7 @@ def main():
         available_commands = [
             HelpCommand(manager),
             HowMuchTimeLeftCommand(),
-            ReniaBackendClient.get_commands()
+            *ReniaBackendClient.get_commands()
         ]
         if ReniaBackendClient.should_enable_photo_command() == '1':
             available_commands.append(UploadPhotoCommand())

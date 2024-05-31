@@ -2,7 +2,6 @@ from typing import List, Dict
 from telegram.ext import Application, BaseHandler, MessageHandler
 from . import BaseCommand
 
-from logs import logger
 
 class CommandManager:
 

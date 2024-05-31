@@ -2,20 +2,15 @@ import os
 from typing import List
 import requests
 import json
-
 from commands import BaseCommand, ManagedCommand
 from requests.auth import HTTPBasicAuth
-
 from logs import logger
 
 
 class ReniaBackendClient:
     url = 'http://renia-tg-backend:5001'
-    #USERNAME = os.environ.get('USERNAME')
-    USERNAME = "admin"
-    #PASSWORD = os.environ.get('PASSWORD')
-    PASSWORD = "admin"
-    #logger.info(USERNAME, PASSWORD)
+    USERNAME = os.environ.get('USERNAME')
+    PASSWORD = os.environ.get('PASSWORD')
 
     @staticmethod
     def get_commands() -> List[BaseCommand]:
