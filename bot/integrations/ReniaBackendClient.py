@@ -11,14 +11,17 @@ from logs import logger
 
 class ReniaBackendClient:
     url = 'http://renia-tg-backend:5001'
-    USERNAME = os.environ.get('USERNAME')
-    PASSWORD = os.environ.get('PASSWORD')
+    #USERNAME = os.environ.get('USERNAME')
+    USERNAME = "admin"
+    #PASSWORD = os.environ.get('PASSWORD')
+    PASSWORD = "admin"
+    #logger.info(USERNAME, PASSWORD)
 
     @staticmethod
     def get_commands() -> List[BaseCommand]:
         res = requests.get(f'{ReniaBackendClient.url}/simple-commands',
                            auth=HTTPBasicAuth(ReniaBackendClient.USERNAME, ReniaBackendClient.PASSWORD))
-
+        
         if res.status_code != 200:
             raise requests.RequestException(f'Backend odpowiedział kodem {res.status_code} ({res.reason})')
         
