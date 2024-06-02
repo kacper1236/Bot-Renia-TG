@@ -13,7 +13,6 @@ def main():
         load_dotenv()
         persistance = DatabasePersistence()
         app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).persistence(persistance).build()
-        #app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).build()
         
         manager = CommandManager(app)
         availableCommands = [
