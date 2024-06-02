@@ -81,12 +81,21 @@ class DatabasePersistence(BasePersistence):
     async def update_conversation(self, name: str, key: str, new_state: any):
         if new_state == None and name == "zdjecia":
             del self.conversations[name][key]
-            logger.info(self.conversations)
+            with open("./commands/DatabasePersistenceJson/conversation.json", "w") as f:
+                data_seriazable = json.load(f)
+                for k, v in self.conversations.items():
+                    for i, j in v.items():
+                        data_seriazable[k] = {eval(i): j}
             return
         if name not in self.conversations:
             self.conversations[name] = {}
         self.conversations[name][key] = new_state
-        #await self.flush()
+        data_seriazable = {}
+        for k, v in self.conversations.items():
+            for i, j in v.items():
+                data_seriazable[k] = {str(i): j}
+        with open("./commands/DatabasePersistenceJson/conversation.json", "w") as f:
+            json.dump(data_seriazable, f)
 
     async def update_user_data(self, user_id: int, user_data: any):
         if user_id not in self.user_data:
