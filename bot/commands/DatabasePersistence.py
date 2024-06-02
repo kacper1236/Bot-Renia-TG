@@ -4,7 +4,7 @@ from logs import logger
 
 class DatabasePersistence(BasePersistence):
 
-    path = "./commands/DatabasePersistenceJson/conversation.json"
+    path = "../DatabasePersistenceJson/conversation.json"
 
     def __init__(self) -> None:
         super(DatabasePersistence, self).__init__(store_data=PersistenceInput(bot_data=True, chat_data=True, user_data=True, callback_data=True), update_interval=1)
@@ -87,6 +87,7 @@ class DatabasePersistence(BasePersistence):
             for k, v in self.conversations.items():
                 for i, j in v.items():
                     data_seriazable[k] = {eval(i): j}
+            json.dump(data_seriazable, f)
         return
 
     async def update_conversation(self, name: str, key: str, new_state: any):
@@ -99,7 +100,7 @@ class DatabasePersistence(BasePersistence):
         for k, v in self.conversations.items():
             for i, j in v.items():
                 data_seriazable[k] = {str(i): j}
-        with open("./commands/DatabasePersistenceJson/conversation.json", "w") as f:
+        with open(self.path, "w") as f:
             json.dump(data_seriazable, f)
 
     async def update_user_data(self, user_id: int, user_data: any):
