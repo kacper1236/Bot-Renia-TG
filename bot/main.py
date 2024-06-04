@@ -4,15 +4,16 @@ import os
 import sys
 
 from integrations import ReniaBackendClient
-from commands import TestCommand, CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand
+from commands import TestCommand, CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand, DatabasePersistence
 from logs import logger, error
 import requests
 
 def main():
     try:
         load_dotenv()
-        app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).build()
-
+        persistence = DatabasePersistence()
+        app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).persistence(persistence).build()
+        
         manager = CommandManager(app)
         availableCommands = [
             HelpCommand(manager),

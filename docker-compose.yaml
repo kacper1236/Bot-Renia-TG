@@ -22,6 +22,7 @@ services:
       - ./logs:/logs
       - ./photos:/photos
       - ./bot:/bot/
+      - ./DatabasePersistenceJson:/DatabasePersistenceJson
     depends_on:
       - renia-tg-backend
 

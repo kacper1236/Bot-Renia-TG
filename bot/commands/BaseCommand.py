@@ -55,18 +55,17 @@ class ConversationCommand(BaseCommand):
         return ConversationHandler(
             entry_points=self.entry_points(),
             states={state: commands for state, commands in self.states().items()},
-            fallbacks=self.fallbacks()
+            fallbacks=self.fallbacks(),
+            name = self.name,
+            persistent=True
         )
 
     @abstractmethod
     def entry_points(self) -> List[BaseHandler]:
         '''
         Funkcja obsługująca wejście do konwersacji
-
-        Parameters:
-        update: obiekt `Update`
-        context: kontekst callbacku
-
+        Przykład:
+        return [CommandHandler(self.name, self.start)]
         '''
         pass
 
@@ -74,11 +73,10 @@ class ConversationCommand(BaseCommand):
     def states(self) -> Dict[int, List[BaseHandler]]:
         '''
         Funkcja obsługująca stan konwersacji
-
-        Parameters:
-        update: obiekt `Update`
-        context: kontekst callbacku
-
+        Przykład:
+        return {
+            self.SAVE: [MessageHandler(self.filter, self.zapisz)]
+        }
         '''
         pass
     
@@ -86,11 +84,8 @@ class ConversationCommand(BaseCommand):
     def fallbacks(self) -> List[BaseHandler]:
         '''
         Funkcja obsługująca listę programów obsługi, które mogą zostać użyte w konwersacji
-
-        Parameters:
-        update: obiekt `Update`
-        context: kontekst callbacku
-
+        Przykład:
+        return [CommandHandler("end", self.end)]
         '''
         pass
 
