@@ -23,6 +23,7 @@ class DatabasePersistence(BasePersistence):
             del self.user_data[user_id]
 
     async def flush(self):
+        '''
         data_seriazable = {}
         for k, v in self.conversations.items():
             for i, j in v.items():
@@ -33,6 +34,7 @@ class DatabasePersistence(BasePersistence):
                 json.dump(data_seriazable, f)
         except Exception as e:
             logger.info(e)
+        '''
         logger.info("Flushed")
 
     async def get_bot_data(self) -> dict:
@@ -47,10 +49,12 @@ class DatabasePersistence(BasePersistence):
     async def get_conversations(self, name: str) -> dict:
         try:
             with open(self.path, "r") as f:
-                self.conversations = json.load(f)
-                for k, v in self.conversations.items():
+                data_seriazable = json.load(f)
+                for k, v in data_seriazable.items():
+                    if k not in self.conversations:
+                        self.conversations[k] = {}
                     for i, j in v.items():
-                        self.conversations[k] = {eval(i): j}
+                        self.conversations[k][eval(i)] = j
         except Exception as e:
             logger.info(e)
         return self.conversations.get(name, {})
@@ -83,10 +87,12 @@ class DatabasePersistence(BasePersistence):
     async def delete_conversation(self, name: str, key: str, new_state: any):
         del self.conversations[name][key]
         with open(self.path, "w") as f:
-            data_seriazable = json.load(f)
+            data_seriazable = {}
             for k, v in self.conversations.items():
+                if k not in data_seriazable:
+                    data_seriazable[k] = {}
                 for i, j in v.items():
-                    data_seriazable[k] = {eval(i): j}
+                    data_seriazable[k][str(i)] = j
             json.dump(data_seriazable, f)
         return
 
@@ -99,7 +105,11 @@ class DatabasePersistence(BasePersistence):
         data_seriazable = {}
         for k, v in self.conversations.items():
             for i, j in v.items():
-                data_seriazable[k] = {str(i): j}
+                if j == None:
+                    continue
+                if k not in data_seriazable:
+                    data_seriazable[k] = {}
+                data_seriazable[k][str(i)] = j
         with open(self.path, "w") as f:
             json.dump(data_seriazable, f)
 
@@ -107,3 +117,5 @@ class DatabasePersistence(BasePersistence):
         if user_id not in self.user_data:
             self.user_data[user_id] = {}
         self.user_data[user_id].update(user_data)
+
+        #{"zdjecia": {"(553091064, 553091064)": "ZAPISZ_ZDJECIA", "(790850239, 790850239)": "ZAPISZ_ZDJECIA"}}
