@@ -1,7 +1,7 @@
-
 from telegram import Update
 from telegram.ext import CallbackContext
 from . import SlashCommand, command_with_logs, CommandManager
+
 
 class HelpCommand(SlashCommand):
     name = 'help'
