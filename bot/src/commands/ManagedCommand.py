@@ -1,7 +1,9 @@
 from telegram import Update
 from telegram.ext import CallbackContext
-import requests
 from . import SlashCommand, command_with_logs
+from ..bot.logs import logger
+from ..integrations import ReniaBackendClient
+
 
 class ManagedCommand(SlashCommand):
     '''
@@ -15,6 +17,8 @@ class ManagedCommand(SlashCommand):
 
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
-        resultFromBackend= requests.get(f'http://renia-tg-backend:5001/simple-commands/{self.name}').text
-        await update.message.reply_text(resultFromBackend)
+        try:
+            await update.message.reply_text(ReniaBackendClient.get_simple_command_response(self.name))
+        except Exception:
+            logger.exception("Renia napotkała błąd podczas pracy!")
             

@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, filters, MessageHandler
 from . import ConversationCommand, command_with_logs
 import os
-from logs import logger
+from ..bot.logs import logger
 
 from datetime import datetime
 

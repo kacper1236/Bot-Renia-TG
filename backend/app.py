@@ -1,12 +1,18 @@
 import json
 from flask import Flask
+from flask_basicauth import BasicAuth
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-
+import os
 
 # Create a Flask application
 app = Flask(__name__)
+
+app.config['BASIC_AUTH_USERNAME'] = os.environ.get('USERNAME')
+app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('PASSWORD')
+app.config['BASIC_AUTH_FORCE'] = True
+basic_auth = BasicAuth(app)
 
 # Configure the database URI
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://my_user:my_password@postgres/my_database'
@@ -16,7 +22,6 @@ app.secret_key = 'super secret key'
 db = SQLAlchemy()
 
 admin = Admin(app)
-
 
 # Define a model
 class SimpleCommand(db.Model):

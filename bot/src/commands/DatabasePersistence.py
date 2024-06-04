@@ -1,6 +1,6 @@
 from telegram.ext import BasePersistence, PersistenceInput
 import json
-from logs import logger
+from ..bot.logs import logger
 
 class DatabasePersistence(BasePersistence):
 

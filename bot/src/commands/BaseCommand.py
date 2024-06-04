@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from telegram import Update
 from telegram.ext import BaseHandler, CommandHandler, CallbackContext, MessageHandler, filters, ConversationHandler
-from logs import logger
+from ..bot.logs import logger
 from typing import List, Dict
 
 def command_with_logs(func):
