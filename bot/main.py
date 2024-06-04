@@ -11,8 +11,8 @@ import requests
 def main():
     try:
         load_dotenv()
-        persistance = DatabasePersistence()
-        app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).persistence(persistance).build()
+        persistence = DatabasePersistence()
+        app = ApplicationBuilder().token(os.environ.get('TG_TOKEN')).persistence(persistence).build()
         
         manager = CommandManager(app)
         availableCommands = [
