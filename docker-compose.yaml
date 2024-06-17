@@ -17,6 +17,9 @@ services:
     restart: always
     environment:
       TG_TOKEN: ${TG_TOKEN}
+      FOXCONS_TOKEN: ${FOXCONS_TOKEN}
+      USERNAME: ${USERNAME}
+      PASSWORD: ${PASSWORD}
     build: ./bot
     volumes:
       - ./logs:/logs
