@@ -5,4 +5,4 @@ data/
 *.session
 *.session-journal
 photos/*
-DatabasePersistenceJson/*.json
+DatabasePersistenceJson\conversation.json

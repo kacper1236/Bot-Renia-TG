@@ -7,7 +7,7 @@ from ..integrations import ReniaBackendClient
 
 class ManagedCommand(SlashCommand):
     '''
-    Komenda ustawiana poprzez UI Administratorskie
+    Komenda ustawiana poprzes UI Administratorskie
     '''
     
     def __init__(self, name: str, text: str, description: str) -> None:

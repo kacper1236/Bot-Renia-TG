@@ -6,18 +6,14 @@ from ..commands import BaseCommand, ManagedCommand
 from requests.auth import HTTPBasicAuth
 from ..bot.logs import logger
 
-__url = 'http://renia-tg-backend:5001'
-__username = os.environ.get('USERNAME')
-__password = os.environ.get('PASSWORD')
-__auth = HTTPBasicAuth(__username, __password)
-
-
-def __get(endpoint: str):
-    return requests.get(f'{__url}{endpoint}', auth=__auth)
+URL = 'http://renia-tg-backend:5001'
+USERNAME = os.environ.get('USERNAME')
+PASSWORD = os.environ.get('PASSWORD')
 
 
 def get_commands() -> List[BaseCommand]:
-    res = __get('/simple-commands')
+    res = requests.get(f'{URL}/simple-commands',
+                       auth=HTTPBasicAuth(USERNAME, PASSWORD))
 
     if res.status_code != 200:
         raise requests.RequestException(f'Backend odpowiedział kodem {res.status_code} ({res.reason})')
@@ -28,8 +24,10 @@ def get_commands() -> List[BaseCommand]:
 
 
 def should_enable_photo_command():
-    return __get('/configs/photo_upload').status_code == 200
+    return requests.get(f'http://renia-tg-backend:5001/configs/photo_upload',
+                        auth=HTTPBasicAuth(USERNAME, PASSWORD)).text
 
 
 def get_simple_command_response(name):
-    return __get(f'/simple-commands/{name}').text
+    return requests.get(f'http://renia-tg-backend:5001/simple-commands/{name}',
+                 auth=HTTPBasicAuth(USERNAME, PASSWORD)).text
