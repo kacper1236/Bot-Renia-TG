@@ -1,5 +1,7 @@
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, filters, MessageHandler
+
+from ..commands import CommandManager
 from . import ConversationCommand, command_with_logs
 import os
 from ..bot.logs import logger
@@ -11,7 +13,11 @@ class UploadPhotoCommand(ConversationCommand):
     name = "zdjecia"
     description = "Wyślij zdjęcia"
 
-    filter = filters.PHOTO | filters.VIDEO | filters.COMMAND
+    filter = filters.PHOTO | filters.VIDEO 
+
+    def __init__(self, manager: CommandManager) -> None:
+        super().__init__()
+        self.manager = manager
 
     async def start(self, update: Update, context: CallbackContext) -> int:
         logger.info(f"Użytkownik {update.message.from_user.id} wywołał komendę /zapisz")
@@ -19,6 +25,9 @@ class UploadPhotoCommand(ConversationCommand):
         return self.SAVE
 
     async def zapisz(self, update: Update, context: CallbackContext) -> int:
+        if update.message.text in self.manager.descriptions.keys():
+            logger.info("hewwo :3")
+            return
         try:
             user_id = update.message.from_user.id
             file = update.message.effective_attachment[-1]

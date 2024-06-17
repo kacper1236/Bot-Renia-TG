@@ -20,7 +20,7 @@ def main():
             *ReniaBackendClient.get_commands()
         ]
         if ReniaBackendClient.should_enable_photo_command():
-            available_commands.append(UploadPhotoCommand())
+            available_commands.append(UploadPhotoCommand(manager))
 
         manager.setup(available_commands)
         app.add_error_handler(error)
