@@ -9,7 +9,7 @@ import os
 # Create a Flask application
 app = Flask(__name__)
 
-app.config['BASIC_AUTH_USERNAME'] = os.environ.get('USERNAME')
+app.config['BASIC_AUTH_USERNAME'] = os.environ.get('USR')
 app.config['BASIC_AUTH_PASSWORD'] = os.environ.get('PASSWORD')
 app.config['BASIC_AUTH_FORCE'] = True
 basic_auth = BasicAuth(app)

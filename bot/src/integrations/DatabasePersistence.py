@@ -4,7 +4,7 @@ from ..bot.logs import logger
 
 class DatabasePersistence(BasePersistence):
 
-    path = "../DatabasePersistenceJson/conversation.json"
+    path = "/DatabasePersistenceJson/conversation.json" # absolut path w dockerze
 
     def __init__(self) -> None:
         super(DatabasePersistence, self).__init__(store_data=PersistenceInput(bot_data=True, chat_data=True, user_data=True, callback_data=True), update_interval=1)

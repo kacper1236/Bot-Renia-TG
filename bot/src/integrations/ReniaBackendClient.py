@@ -7,10 +7,9 @@ from requests.auth import HTTPBasicAuth
 from ..bot.logs import logger
 
 __url = 'http://renia-tg-backend:5001'
-__username = os.environ.get('USERNAME')
+__username = os.environ.get('USR')
 __password = os.environ.get('PASSWORD')
 __auth = HTTPBasicAuth(__username, __password)
-
 
 def __get(endpoint: str):
     return requests.get(f'{__url}{endpoint}', auth=__auth)

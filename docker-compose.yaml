@@ -8,7 +8,7 @@ services:
       POSTGRES_DB: my_database
       POSTGRES_USER: my_user
       POSTGRES_PASSWORD: my_password
-      USERNAME: ${USERNAME}
+      USR: ${USR}
       PASSWORD: ${PASSWORD}
     ports:
       - "5432:5432"
@@ -20,7 +20,7 @@ services:
     environment:
       TG_TOKEN: ${TG_TOKEN}
       FOXCONS_TOKEN: ${FOXCONS_TOKEN}
-      USERNAME: ${USERNAME}
+      USR: ${USR}
       PASSWORD: ${PASSWORD}
     build: ./bot
     volumes:

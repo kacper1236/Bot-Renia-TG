@@ -11,7 +11,7 @@ class UploadPhotoCommand(ConversationCommand):
     name = "zdjecia"
     description = "Wyślij zdjęcia"
 
-    filter = filters.PHOTO | filters.VIDEO | filters.COMMAND | filters.TEXT
+    filter = filters.PHOTO | filters.VIDEO | filters.COMMAND
 
     async def start(self, update: Update, context: CallbackContext) -> int:
         logger.info(f"Użytkownik {update.message.from_user.id} wywołał komendę /zapisz")
