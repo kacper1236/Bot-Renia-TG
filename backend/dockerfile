@@ -5,7 +5,7 @@ FROM python:3.9-alpine
 WORKDIR /app
 
 # Copy the application files to the container
-COPY . /app
+COPY . .
 RUN chmod +x /app/start_server.sh
 
 # Install dependencies

@@ -2,8 +2,8 @@ from telegram.ext import ApplicationBuilder
 from dotenv import load_dotenv
 import os
 import sys
-from ..integrations import ReniaBackendClient
-from ..commands import CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand, DatabasePersistence
+from ..integrations import ReniaBackendClient, DatabasePersistence
+from ..commands import CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand
 from .logs import logger, error
 
 
@@ -19,7 +19,7 @@ def main():
             HowMuchTimeLeftCommand(),
             *ReniaBackendClient.get_commands()
         ]
-        if ReniaBackendClient.should_enable_photo_command() == '1':
+        if ReniaBackendClient.should_enable_photo_command():
             available_commands.append(UploadPhotoCommand())
 
         manager.setup(available_commands)
@@ -32,7 +32,3 @@ def main():
         logger.exception("Renia napotkała błąd podczas pracy!")
     finally:
         logger.info("Renia konczy działanie")
-
-
-if __name__ == "__main__":
-    main()
