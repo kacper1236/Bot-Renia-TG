@@ -31,3 +31,7 @@ def should_enable_photo_command():
 def get_simple_command_response(name):
     return requests.get(f'http://renia-tg-backend:5001/simple-commands/{name}',
                  auth=HTTPBasicAuth(USERNAME, PASSWORD)).text
+
+def login_to_foxcons():
+    a = requests.post("https://dev.foxcons.pl/app/auth/login/api", json={"loginToken": "your_token_here"})
+    return a.text
