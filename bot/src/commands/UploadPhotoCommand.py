@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, filters, MessageHandler
 from . import ConversationCommand, command_with_logs
-import os
+import os, time
 from ..bot.logs import logger
 
 from datetime import datetime
@@ -15,7 +15,7 @@ class UploadPhotoCommand(ConversationCommand):
 
     async def start(self, update: Update, context: CallbackContext) -> int:
         logger.info(f"Użytkownik {update.message.from_user.id} wywołał komendę /zapisz")
-        await update.message.reply_text("Wyślij zdjęcie, które chcesz zapisać\n Aby zakończyć zapisywanie napisz /end")
+        await update.message.reply_text("Wyślij zdjęcie, które chcesz zapisać\n Aby zakończyć zapisywanie napisz /end\n UWAGA zdjęcia które zostały pobrane zostaną usunięte z tego chatu")
         return self.SAVE
 
     async def zapisz(self, update: Update, context: CallbackContext) -> int:
@@ -25,6 +25,9 @@ class UploadPhotoCommand(ConversationCommand):
             logger.info(f"Użytkownik {user_id} wysłał zdjęcie o ID {file.file_id}")
             new_file = await file.get_file()
             await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{datetime.now().timestamp()}.jpg"))
+            await update.message.set_reaction("👍")
+            time.sleep(1)
+            await update.message.delete()
         except Exception as e:
             if update.message.text == "/end":
                 return await self.end(update, context)

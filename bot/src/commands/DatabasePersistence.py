@@ -97,7 +97,7 @@ class DatabasePersistence(BasePersistence):
         return
 
     async def update_conversation(self, name: str, key: str, new_state: any):
-        if new_state == None and name == "zdjecia":
+        if new_state == None:
             await self.delete_conversation(name, key, new_state)
         if name not in self.conversations:
             self.conversations[name] = {}
