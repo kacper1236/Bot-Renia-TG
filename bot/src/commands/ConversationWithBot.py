@@ -16,7 +16,7 @@ class ConversationWithBot(ConversationCommand):
     async def conv(self, update: Update, context: CallbackContext) -> int:
         if update.message.text == "/end":
             return await self.end(update, context)
-        await update.message.copy(update.message.chat_id, protect_content = True)
+        await update.message.copy(update.message.chat_id)
         return self.coversation
     
     async def end(self, update: Update, context: CallbackContext) -> int:
