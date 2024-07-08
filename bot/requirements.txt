@@ -4,3 +4,4 @@ requests
 py-mon
 pyjwt
 pyjwt[crypto]
+jwcrypto

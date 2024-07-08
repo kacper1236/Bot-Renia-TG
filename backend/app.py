@@ -37,9 +37,20 @@ class Config(db.Model):
     value = db.Column(db.String(120), unique=False, nullable=False)
     description = db.Column(db.String(120), unique=False, nullable=False)
 
+class VerfiedUsers(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), unique=True, nullable=False)
+    id_username = db.Column(db.Integer, unique=True, nullable=False)
+    verify = db.Column(db.Boolean, unique=False, nullable=False)
+    room = db.Column(db.Boolean, unique=False, nullable=False)
+    plan_id = db.Column(db.Integer, unique=False, nullable=False)
+    plan_selected = db.Column(db.Integer, unique=False, nullable=False)
+    plan_paid = db.Column(db.Integer, unique=False, nullable=False)
+
 
 admin.add_view(ModelView(SimpleCommand, db.session))
 admin.add_view(ModelView(Config, db.session))
+admin.add_view(ModelView(VerfiedUsers, db.session))
 db.init_app(app)
 
 
@@ -71,6 +82,23 @@ def get_config(name):
     if result is not None:
         return result.value
     return "No config found"
+
+@app.route('/verified-users')
+def get_list_of_verified_users(): #naprawić
+    result = db.session.query(VerfiedUsers).all()
+    if result is not None:
+        return json.dumps({
+            'result': [{
+                'username': user.username,
+                'id_username': user.id_username,
+                'verify': user.verify,
+                'room': user.room,
+                'plan_id': user.plan_id,
+                'plan_selected': user.plan_selected,
+                'plan_paid': user.plan_paid
+            } for user in result]
+        })
+    return "No informations yet"
 
 
 if __name__ == '__main__':

@@ -10,7 +10,6 @@ URL = 'http://renia-tg-backend:5001'
 USERNAME = os.environ.get('USERNAME')
 PASSWORD = os.environ.get('PASSWORD')
 
-
 def get_commands() -> List[BaseCommand]:
     res = requests.get(f'{URL}/simple-commands',
                        auth=HTTPBasicAuth(USERNAME, PASSWORD))
@@ -22,16 +21,14 @@ def get_commands() -> List[BaseCommand]:
     logger.info('Komendy zostały wczytane!')
     return commands
 
-
 def should_enable_photo_command():
     return requests.get(f'http://renia-tg-backend:5001/configs/photo_upload',
                         auth=HTTPBasicAuth(USERNAME, PASSWORD)).text
-
 
 def get_simple_command_response(name):
     return requests.get(f'http://renia-tg-backend:5001/simple-commands/{name}',
                  auth=HTTPBasicAuth(USERNAME, PASSWORD)).text
 
 def login_to_foxcons():
-    a = requests.post("https://dev.foxcons.pl/app/auth/login/api", json={"loginToken": "your_token_here"})
+    a = requests.post("https://dev.foxcons.pl/app/auth/login/api", json={"loginToken": "kacper"})
     return a.text

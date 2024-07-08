@@ -5,4 +5,4 @@ from .HowMuchTimeLeftCommand import *
 from .CommandManager import *
 from .UploadPhotoCommand import *
 from .DatabasePersistence import *
-from .API import *
+from .Verify import *

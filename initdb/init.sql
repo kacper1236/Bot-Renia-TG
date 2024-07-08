@@ -23,3 +23,14 @@ CREATE TABLE config (
 -- Insert initial data into the config table
 INSERT INTO config (name, value, description) VALUES
     ('photo_upload', '0', '0 lub 1 w zaleznosci czy komendia /zdjecia do uploadowania zdjec ma byc aktywna');
+
+CREATE TABLE user(
+    id INTEGER PRIMARY KEY, --ID telegram
+    username VARCHAR(120) UNIQUE NOT NULL, --nick foxcons
+    id_username INTEGER UNIQUE NOT NULL, -- ID foxcons
+    verify BOOLEAN NOT NULL, -- czy zweryfikowany
+    room BOOLEAN NOT NULL, -- czy ma pokoj
+    plan_id INTEGER NOT NULL, -- plan
+    plan_selected VARCHAR(30) NOT NULL, -- jaki wybrany plan
+    plan_paid BOOLEAN NOT NULL -- czy zaplacony
+);
