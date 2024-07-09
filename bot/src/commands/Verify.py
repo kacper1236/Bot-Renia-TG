@@ -76,12 +76,15 @@ class Verify(SlashCommand):
             raise Exception("Nie można połączyć się z Foxcons")
 
     async def fetchUserData(self, ID):
+        if ID.__class__ == dict:
+            return self.matchErrrorsInResponse()
         try:
             logger.info("Pobieranie danych")
             data = requests.get(f"{self.link}/app/event/*/bot/profile/{ID}", 
                                 headers = {"Authorization": f"Bearer {self.currentToken}"}).json()
             if data.status_code != 200:
                 raise Exception("Błąd podczas pobierania danych")
+            
             logger.info(data)
         except Exception as e:
             logger.info("Nie można pobrać danych")    

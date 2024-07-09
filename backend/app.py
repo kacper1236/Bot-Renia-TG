@@ -37,7 +37,7 @@ class Config(db.Model):
     value = db.Column(db.String(120), unique=False, nullable=False)
     description = db.Column(db.String(120), unique=False, nullable=False)
 
-class VerfiedUsers(db.Model):
+class VerifiedUsers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
     id_username = db.Column(db.Integer, unique=True, nullable=False)
@@ -50,7 +50,7 @@ class VerfiedUsers(db.Model):
 
 admin.add_view(ModelView(SimpleCommand, db.session))
 admin.add_view(ModelView(Config, db.session))
-admin.add_view(ModelView(VerfiedUsers, db.session))
+admin.add_view(ModelView(VerifiedUsers, db.session))
 db.init_app(app)
 
 
@@ -67,14 +67,12 @@ def get_all_users():
         })
     return "No informations yet"
 
-
 @app.route('/simple-commands/<name>')
 def get_users(name):
     result = db.session.query(SimpleCommand).filter_by(name=name).first()
     if result is not None:
         return result.value
     return "No information yet"
-
 
 @app.route('/configs/<name>')
 def get_config(name):
@@ -84,11 +82,12 @@ def get_config(name):
     return "No config found"
 
 @app.route('/verified-users')
-def get_list_of_verified_users(): #naprawić
-    result = db.session.query(VerfiedUsers).all()
+def get_list_of_verified_users():
+    result = db.session.query(VerifiedUsers).all()
     if result is not None:
         return json.dumps({
             'result': [{
+                'id': user.id,
                 'username': user.username,
                 'id_username': user.id_username,
                 'verify': user.verify,
