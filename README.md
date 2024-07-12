@@ -19,7 +19,7 @@ Create `.env` file in root project directory and create an required variables:
 TG_TOKEN=<TG_TOKEN>
 USERNAME=admin
 PASSWORD=admin
-
+ISS = <link from jwk>
 ```
 
 ## Running

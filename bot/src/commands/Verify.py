@@ -5,6 +5,7 @@ from ..bot.logs import logger
 from ..integrations import ReniaBackendClient
 import jwt, base64, requests, json, os
 import jwcrypto.jwk as jwk
+import psycopg2
 
 class Verify(SlashCommand):
     '''
@@ -17,14 +18,22 @@ class Verify(SlashCommand):
     currentToken = ""
     errors = 0
     idUser = None
+    #conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database") #moze się przydać
+    #cur = conn.cursor()
     def markError(self): 
         self.errors += 1
         if self.errors > 3:
             self.currentToken = ""
 
-    async def download_jwk_keys(self, issuser: str):
+    async def DownloadJwkKeys(self, issuser: str):
         keys = requests.get(issuser)
         return keys.json()
+    
+    def checkIfIssIsAllowed(self, issuser: str):
+        ISS: str = os.environ.get("ISS")
+        if issuser != ISS:
+            return False
+        return True
 
     async def connect(self):
         logger.info("pobieranie tokenu")
@@ -32,9 +41,11 @@ class Verify(SlashCommand):
             token = ReniaBackendClient.login_to_foxcons()
             tokenPart = token.split(".")[1]
             missingPadding = len(tokenPart) % 3
-            payload = json.loads(base64.b64decode(tokenPart + missingPadding*"=").decode("utf-8")) #musi sie zaczynać od linka
-            #to do: verify iss is in alowed in url (database needed) simply checker
-            keys = await self.download_jwk_keys(payload["iss"])
+            payload = json.loads(base64.b64decode(tokenPart + missingPadding * "=").decode("utf-8")) #musi zawierać odpowiedni link
+            logger.info(payload)
+            if self.checkIfIssIsAllowed(payload["iss"]) == False:
+                raise Exception("Nieautoryzowany dostęp lub błędny ISS w env")
+            keys = await self.DownloadJwkKeys(payload["iss"])
             isFailure = True
             for i in keys["keys"]:
                 try:
@@ -53,7 +64,7 @@ class Verify(SlashCommand):
                 self.currentToken = token
                 self.errors = 0
             else:
-                raise Exception("Nie można zweryfikować tokenu (signature not verify)")
+                raise Exception("Nie można zweryfikować tokenu (signature not verify or expired)")
             #logger.info("xD1")
             #logger.info(requests.get("https://dev.foxcons.pl/app/event/Futrołajki-2022/bot/profile/124", headers = {"Authorization": f"Bearer {self.currentToken}"}).json())
             #logger.info("xD2")
@@ -61,6 +72,7 @@ class Verify(SlashCommand):
             logger.info(e)
             logger.info(f"Renia napotkała błąd podczas logowania się do Foxcons! {e}")  
             self.markError()
+            raise Exception(e)
     
     def isWorking(self):
         return self.errors == 0 and self.currentToken != ""
@@ -84,11 +96,14 @@ class Verify(SlashCommand):
                                 headers = {"Authorization": f"Bearer {self.currentToken}"}).json()
             if data.status_code != 200:
                 raise Exception("Błąd podczas pobierania danych")
-            
             logger.info(data)
+            self.conn = self.curr.execute(f"INSERT INTO verified_users (username, id_username, verify, room, plan_id, plan_selected, plan_paid) VALUES ({data['id']}, {ID}, 1, 0, 0, 0, 0)")
+            self.conn.commit()
+            logger.info("Dane zostały dodane do bazy")
         except Exception as e:
             logger.info("Nie można pobrać danych")    
             logger.info(e)
+            raise Exception(e)
 
     def matchErrrorsInResponse(self):
         match self.idUser["statusCode"]:
@@ -109,15 +124,13 @@ class Verify(SlashCommand):
             case 410:
                 raise Exception("Foncons maintance mode off")
             case _:
-                raise Exception("Nieznany błąd")
+                raise Exception(f"Nieznany błąd {self.idUser['statusCode']}")
 
     async def verify(self, token, name, ID):
         try:
-            logger.info("Weryfikacja")
             self.idUser = requests.post(f"{self.link}/app/event/*/bot/verify/telegram", 
                               json = {"token": token, "name": name, "id": ID}, 
                               headers = {"Authorization": f"Bearer {self.currentToken}"}).json()
-            logger.info(self.idUser)
             if self.idUser.__class__ == int:
                 return
             else:
@@ -125,6 +138,7 @@ class Verify(SlashCommand):
         except Exception as e:
             logger.info("Nie można zweryfikować tokenu")
             logger.info(e)
+            raise Exception(e)
     
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
@@ -152,6 +166,6 @@ class Verify(SlashCommand):
                         id: number;
                     }
             '''
-        except Exception:
+        except Exception as e:
             self.markEerror()
-            logger.exception("Renia napotkała błąd podczas pracy!")
+            logger.info(f"Renia napotkała błąd podczas pracy! {e}")
