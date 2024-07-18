@@ -29,7 +29,7 @@ CREATE TABLE verified_users (
     id INTEGER PRIMARY KEY, -- ID telegram
     username VARCHAR(120) UNIQUE NOT NULL, -- nick foxcons
     id_username INTEGER UNIQUE NOT NULL, -- ID foxcons
-    verify BOOLEAN NOT NULL, -- czy zweryfikowany
+    is_verified BOOLEAN NOT NULL, -- czy zweryfikowany
     room BOOLEAN NOT NULL, -- czy ma pokój
     plan_id INTEGER NOT NULL, -- plan
     plan_selected VARCHAR(30) NOT NULL, -- jaki wybrany plan
@@ -37,6 +37,6 @@ CREATE TABLE verified_users (
 );
 
 -- Insert initial data into the verified_users table
-INSERT INTO verified_users (id, username, id_username, verify, room, plan_id, plan_selected, plan_paid) VALUES
+INSERT INTO verified_users (id, username, id_username, is_verified, room, plan_id, plan_selected, plan_paid) VALUES
     (123456789, 'nick', 123456789, TRUE, TRUE, 1, 'plan1', TRUE),
     (987654321, 'nick2', 987654321, TRUE, TRUE, 2, 'plan2', TRUE);

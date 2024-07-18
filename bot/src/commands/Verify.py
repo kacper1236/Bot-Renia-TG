@@ -18,14 +18,14 @@ class Verify(SlashCommand):
     currentToken = ""
     errors = 0
     idUser = None
-    #conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database") #moze się przydać
+    #conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database") #na pewno się przyda
     #cur = conn.cursor()
     def markError(self): 
         self.errors += 1
         if self.errors > 3:
             self.currentToken = ""
 
-    async def DownloadJwkKeys(self, issuser: str):
+    async def downloadJwkKeys(self, issuser: str):
         keys = requests.get(issuser)
         return keys.json()
     
@@ -42,10 +42,9 @@ class Verify(SlashCommand):
             tokenPart = token.split(".")[1]
             missingPadding = len(tokenPart) % 3
             payload = json.loads(base64.b64decode(tokenPart + missingPadding * "=").decode("utf-8")) #musi zawierać odpowiedni link
-            logger.info(payload)
             if self.checkIfIssIsAllowed(payload["iss"]) == False:
                 raise Exception("Nieautoryzowany dostęp lub błędny ISS w env")
-            keys = await self.DownloadJwkKeys(payload["iss"])
+            keys = await self.downloadJwkKeys(payload["iss"])
             isFailure = True
             for i in keys["keys"]:
                 try:
@@ -65,9 +64,6 @@ class Verify(SlashCommand):
                 self.errors = 0
             else:
                 raise Exception("Nie można zweryfikować tokenu (signature not verify or expired)")
-            #logger.info("xD1")
-            #logger.info(requests.get("https://dev.foxcons.pl/app/event/Futrołajki-2022/bot/profile/124", headers = {"Authorization": f"Bearer {self.currentToken}"}).json())
-            #logger.info("xD2")
         except Exception as e:
             logger.info(e)
             logger.info(f"Renia napotkała błąd podczas logowania się do Foxcons! {e}")  
@@ -97,11 +93,18 @@ class Verify(SlashCommand):
             if data.status_code != 200:
                 raise Exception("Błąd podczas pobierania danych")
             logger.info(data)
-            self.conn = self.curr.execute(f"INSERT INTO verified_users (username, id_username, verify, room, plan_id, plan_selected, plan_paid) VALUES ({data['id']}, {ID}, 1, 0, 0, 0, 0)")
-            self.conn.commit()
-            logger.info("Dane zostały dodane do bazy")
+            try:
+                if self.curr.execute("SELECT COUNT (*) AS count FROM verified_users WHERE id_username = ?", (ID,)) == 0:
+                    self.conn = self.curr.execute(f"INSERT INTO verified_users (username, id_username, is_verified, room, plan_id, plan_selected, plan_paid) VALUES ({data['id']}, {ID}, 1, 0, 0, 0, 0)")
+                else:
+                    self.conn = self.curr.execute(f"UPDATE verified_users SET username = ?, id_username = ?, is_verified = ?, room = ?, plan_id = ?, plan_selected = ?, plan_paid = ?", ({data['id']}, {ID}, 1, 0, 0, 0, 0))
+                self.conn.commit()
+                
+                logger.info("Dane zostały dodane do bazy")
+            except Exception as e:
+                raise Exception(f"Błąd podczas dodawania danych do bazy: {e}")
         except Exception as e:
-            logger.info("Nie można pobrać danych")    
+            logger.info("Nie można pobrać danych")
             logger.info(e)
             raise Exception(e)
 

@@ -4,6 +4,7 @@ from flask_basicauth import BasicAuth
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask import request
 import os
 
 # Create a Flask application
@@ -41,7 +42,7 @@ class VerifiedUsers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
     id_username = db.Column(db.Integer, unique=True, nullable=False)
-    verify = db.Column(db.Boolean, unique=False, nullable=False)
+    is_verified = db.Column(db.Boolean, unique=False, nullable=False)
     room = db.Column(db.Boolean, unique=False, nullable=False)
     plan_id = db.Column(db.Integer, unique=False, nullable=False)
     plan_selected = db.Column(db.Integer, unique=False, nullable=False)
@@ -90,7 +91,7 @@ def get_list_of_verified_users():
                 'id': user.id,
                 'username': user.username,
                 'id_username': user.id_username,
-                'verify': user.verify,
+                'is_verified': user.is_verified,
                 'room': user.room,
                 'plan_id': user.plan_id,
                 'plan_selected': user.plan_selected,
@@ -99,6 +100,12 @@ def get_list_of_verified_users():
         })
     return "No informations yet"
 
+@app.route('/webhook/unlink-verified-user/<id>')
+def unlink_verified_user(id):
+    data = request.get_json()
+    print(data)
+    
+#dodaj listener z foxonsa
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
