@@ -40,7 +40,7 @@ class Config(db.Model):
 
 class VerifiedUsers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(120), unique=False, nullable=False)
     id_username = db.Column(db.Integer, unique=True, nullable=False)
     is_verified = db.Column(db.Boolean, unique=False, nullable=False)
     room = db.Column(db.Boolean, unique=False, nullable=False)
@@ -100,7 +100,7 @@ def get_list_of_verified_users():
         })
     return "No informations yet"
 
-@app.route('/webhook/unlink-verified-user/<id>')
+@app.route('/webhook/unlink-verified-user/<id>', methods=['POST'])
 def unlink_verified_user(id):
     data = request.get_json()
     print(data)

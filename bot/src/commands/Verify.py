@@ -18,8 +18,9 @@ class Verify(SlashCommand):
     currentToken = ""
     errors = 0
     idUser = None
-    #conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database") #na pewno się przyda
-    #cur = conn.cursor()
+    telegramUserID = 0
+    conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database") #na pewno się przyda
+    curr = conn.cursor()
     def markError(self): 
         self.errors += 1
         if self.errors > 3:
@@ -40,7 +41,7 @@ class Verify(SlashCommand):
         try:
             token = ReniaBackendClient.login_to_foxcons()
             tokenPart = token.split(".")[1]
-            missingPadding = len(tokenPart) % 3
+            missingPadding = len(tokenPart) % 4
             payload = json.loads(base64.b64decode(tokenPart + missingPadding * "=").decode("utf-8")) #musi zawierać odpowiedni link
             if self.checkIfIssIsAllowed(payload["iss"]) == False:
                 raise Exception("Nieautoryzowany dostęp lub błędny ISS w env")
@@ -88,16 +89,30 @@ class Verify(SlashCommand):
             return self.matchErrrorsInResponse()
         try:
             logger.info("Pobieranie danych")
+            
             data = requests.get(f"{self.link}/app/event/*/bot/profile/{ID}", 
                                 headers = {"Authorization": f"Bearer {self.currentToken}"}).json()
-            if data.status_code != 200:
-                raise Exception("Błąd podczas pobierania danych")
+            try:
+                if data.status_code != 200:
+                    raise Exception("Błąd podczas pobierania danych")
+            except:
+                pass
             logger.info(data)
             try:
-                if self.curr.execute("SELECT COUNT (*) AS count FROM verified_users WHERE id_username = ?", (ID,)) == 0:
-                    self.conn = self.curr.execute(f"INSERT INTO verified_users (username, id_username, is_verified, room, plan_id, plan_selected, plan_paid) VALUES ({data['id']}, {ID}, 1, 0, 0, 0, 0)")
-                else:
-                    self.conn = self.curr.execute(f"UPDATE verified_users SET username = ?, id_username = ?, is_verified = ?, room = ?, plan_id = ?, plan_selected = ?, plan_paid = ?", ({data['id']}, {ID}, 1, 0, 0, 0, 0))
+                username = data['displayName']
+                id_username = ID
+                is_verified = True
+                room = data['room'].get("selected") if isinstance(data['room'], dict) else False
+                plan_id = data['plan'].get("id") if isinstance(data['plan'], dict) else False
+                plan_selected = data['plan'].get("selected") if isinstance(data['plan'], dict) else False
+                plan_paid = data['plan'].get("paid") if isinstance(data['plan'], dict) else False
+                self.curr.execute(f"""INSERT INTO verified_users (id, username, id_username, is_verified, room, plan_id, plan_selected, plan_paid) 
+                                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                  ON CONFLICT (id_username) DO UPDATE
+                                  SET id = %s, username = %s, id_username = %s, is_verified = %s, room = %s, plan_id = %s, plan_selected = %s, plan_paid = %s""", 
+                                  (self.telegramUserID, username, id_username, is_verified, room, plan_id, plan_selected, plan_paid, #INSERT
+                                   self.telegramUserID, username, id_username, is_verified, room, plan_id, plan_selected, plan_paid,)) #UPDATE
+
                 self.conn.commit()
                 
                 logger.info("Dane zostały dodane do bazy")
@@ -147,6 +162,7 @@ class Verify(SlashCommand):
     async def callback(self, update: Update, context: CallbackContext):
         try:
             logger.info(context.args[0])
+            self.telegramUserID = update.message.from_user.id
             await self.prepareConnection()
             await update.message.reply_text(self.currentToken)
             await self.verify(context.args[0], update.message.from_user.name, update.message.from_user.id)
