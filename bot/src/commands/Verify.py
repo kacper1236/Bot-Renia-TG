@@ -19,8 +19,9 @@ class Verify(SlashCommand):
     errors = 0
     idUser = None
     telegramUserID = 0
-    conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database") #na pewno się przyda
+    conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database")
     curr = conn.cursor()
+
     def markError(self): 
         self.errors += 1
         if self.errors > 3:
@@ -37,7 +38,6 @@ class Verify(SlashCommand):
         return True
 
     async def connect(self):
-        logger.info("pobieranie tokenu")
         try:
             token = ReniaBackendClient.login_to_foxcons()
             tokenPart = token.split(".")[1]
@@ -88,8 +88,6 @@ class Verify(SlashCommand):
         if ID.__class__ == dict:
             return self.matchErrrorsInResponse()
         try:
-            logger.info("Pobieranie danych")
-            
             data = requests.get(f"{self.link}/app/event/*/bot/profile/{ID}", 
                                 headers = {"Authorization": f"Bearer {self.currentToken}"}).json()
             try:
@@ -97,8 +95,8 @@ class Verify(SlashCommand):
                     raise Exception("Błąd podczas pobierania danych")
             except:
                 pass
-            logger.info(data)
             try:
+                logger.info(data)
                 username = data['displayName']
                 id_username = ID
                 is_verified = True
@@ -158,15 +156,22 @@ class Verify(SlashCommand):
             logger.info(e)
             raise Exception(e)
     
+    def translate(self, string, language):
+        
+        pass
+    
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
         try:
-            logger.info(context.args[0])
+            if context.args[0] == "" or context.args[0] == None:
+                await update.message.reply_text("No token specified")
+                return 
             self.telegramUserID = update.message.from_user.id
             await self.prepareConnection()
             await update.message.reply_text(self.currentToken)
             await self.verify(context.args[0], update.message.from_user.name, update.message.from_user.id)
             await self.fetchUserData(self.idUser)
+            await update.message.reply_text("Zostałeś pomyślnie zweryfikowany")
             '''
                 1. User podał /api <token foxconsów>
                     zapisujemy sobie token do pamięci i przechodzimy kroku VERIFY
