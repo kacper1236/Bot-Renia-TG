@@ -21,15 +21,20 @@ class UploadPhotoCommand(ConversationCommand):
     async def zapisz(self, update: Update, context: CallbackContext) -> int:
         try:
             user_id = update.message.from_user.id
-            file = update.message.effective_attachment[-1]
-            logger.info(f"Użytkownik {user_id} wysłał zdjęcie o ID {file.file_id}")
-            new_file = await file.get_file()
-            await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{datetime.now().timestamp()}.jpg"))
+            if update.message.effective_attachment.__class__ == tuple:
+                logger.info(update.message.effective_attachment.__class__)
+                file = update.message.effective_attachment[-1]
+                logger.info(f"Użytkownik {user_id} wysłał zdjęcie o ID {file.file_id}")
+                new_file = await file.get_file()
+                await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{datetime.now().timestamp()}.jpg"))
+            else:
+                new_file = await update.message.effective_attachment.get_file()
+                await new_file.download_to_drive(custom_path=os.path.join(os.getcwd(), f"../photos/{user_id}_{datetime.now().timestamp()}.mp4"))
         except Exception as e:
             if update.message.text == "/end":
                 return await self.end(update, context)
             logger.error(f"Podczas zapisywania zdjęcia wystąpił błąd: {e}")
-            await update.message.reply_text("To nie jest zdjęcie, spróbuj ponownie\n Aby zakończyć zapisywanie napisz /end")
+            await update.message.reply_text("To nie jest zdjęcie lub film jest za duży, spróbuj ponownie\n Aby zakończyć zapisywanie napisz /end")
     
     async def end(self, update: Update, context: CallbackContext) -> int:
         await update.message.reply_text("Zakończono zapisywanie zdjęć")
