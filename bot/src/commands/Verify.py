@@ -1,5 +1,6 @@
 from telegram import Update
 from telegram.ext import CallbackContext
+from .translations import Translations
 from . import SlashCommand, command_with_logs
 from ..bot.logs import logger
 from ..integrations import ReniaBackendClient
@@ -12,6 +13,7 @@ class Verify(SlashCommand):
     Komenda ustawiana poprzez UI Administratorskie
     '''
     name = "verify"
+    description = "verify"
 
     link: str = os.environ.get("LINK")
 
@@ -21,6 +23,8 @@ class Verify(SlashCommand):
     telegramUserID = 0
     conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database")
     curr = conn.cursor()
+
+    translate = Translations()
 
     def markError(self): 
         self.errors += 1
@@ -100,19 +104,15 @@ class Verify(SlashCommand):
                 username = data['displayName']
                 id_username = ID
                 is_verified = True
-                room = data['room'].get("selected") if isinstance(data['room'], dict) else False
-                plan_id = data['plan'].get("id") if isinstance(data['plan'], dict) else False
-                plan_selected = data['plan'].get("selected") if isinstance(data['plan'], dict) else False
-                plan_paid = data['plan'].get("paid") if isinstance(data['plan'], dict) else False
-                self.curr.execute(f"""INSERT INTO verified_users (id, username, id_username, is_verified, room, plan_id, plan_selected, plan_paid) 
-                                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                prefered_language = data['language']
+                self.curr.execute(f"""INSERT INTO verified_users (id, username, id_username, is_verified, prefered_language) 
+                                  VALUES (%s, %s, %s, %s, %s)
                                   ON CONFLICT (id_username) DO UPDATE
-                                  SET id = %s, username = %s, id_username = %s, is_verified = %s, room = %s, plan_id = %s, plan_selected = %s, plan_paid = %s""", 
-                                  (self.telegramUserID, username, id_username, is_verified, room, plan_id, plan_selected, plan_paid, #INSERT
-                                   self.telegramUserID, username, id_username, is_verified, room, plan_id, plan_selected, plan_paid,)) #UPDATE
+                                  SET id = %s, username = %s, id_username = %s, is_verified = %s, prefered_language = %s;""", 
+                                  (self.telegramUserID, username, id_username, is_verified, prefered_language, #INSERT
+                                   self.telegramUserID, username, id_username, is_verified, prefered_language,)) #UPDATE
 
                 self.conn.commit()
-                
                 logger.info("Dane zostały dodane do bazy")
             except Exception as e:
                 raise Exception(f"Błąd podczas dodawania danych do bazy: {e}")
@@ -155,10 +155,10 @@ class Verify(SlashCommand):
             logger.info("Nie można zweryfikować tokenu")
             logger.info(e)
             raise Exception(e)
-    
-    def translate(self, string, language):
         
-        pass
+    def language_user(self, ID):
+        self.curr.execute(f"SELECT prefered_language FROM verified_users WHERE id = {ID}")
+        return self.curr.fetchone()[0]
     
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
@@ -171,7 +171,7 @@ class Verify(SlashCommand):
             await update.message.reply_text(self.currentToken)
             await self.verify(context.args[0], update.message.from_user.name, update.message.from_user.id)
             await self.fetchUserData(self.idUser)
-            await update.message.reply_text("Zostałeś pomyślnie zweryfikowany")
+            await update.message.reply_text(self.translate.t('successful.verified', self.language_user(self.telegramUserID)))
             '''
                 1. User podał /api <token foxconsów>
                     zapisujemy sobie token do pamięci i przechodzimy kroku VERIFY

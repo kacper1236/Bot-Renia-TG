@@ -3,19 +3,27 @@ from telegram.ext import CallbackContext, CommandHandler, ConversationHandler, f
 from . import ConversationCommand, command_with_logs
 import os
 from ..bot.logs import logger
+from .translations import Translations
+from .Database import Database
 
 from datetime import datetime
 
 class UploadPhotoCommand(ConversationCommand):
+    translate = Translations()
+    database = Database()
+
     SAVE = "ZAPISZ_ZDJECIA"
-    name = "zdjecia"
-    description = "Wyślij zdjęcia"
+    name = "upload"
+    description = "upload photos.help"
 
     filter = filters.PHOTO | filters.VIDEO | filters.COMMAND | filters.TEXT
 
+    language = None
+
     async def start(self, update: Update, context: CallbackContext) -> int:
+        self.language = self.database.select('prefered_language', 'verified_users', f'id = {update.message.from_user.id}')
         logger.info(f"Użytkownik {update.message.from_user.id} wywołał komendę /zapisz")
-        await update.message.reply_text("Wyślij zdjęcie, które chcesz zapisać\n Aby zakończyć zapisywanie napisz /end")
+        await update.message.reply_text(self.translate.t("upload photos.start", self.language))
         return self.SAVE
 
     async def zapisz(self, update: Update, context: CallbackContext) -> int:
@@ -34,10 +42,10 @@ class UploadPhotoCommand(ConversationCommand):
             if update.message.text == "/end":
                 return await self.end(update, context)
             logger.error(f"Podczas zapisywania zdjęcia wystąpił błąd: {e}")
-            await update.message.reply_text("To nie jest zdjęcie lub film jest za duży, spróbuj ponownie\n Aby zakończyć zapisywanie napisz /end")
+            await update.message.reply_text(self.translate.t("upload photos.error", self.language))
     
     async def end(self, update: Update, context: CallbackContext) -> int:
-        await update.message.reply_text("Zakończono zapisywanie zdjęć")
+        await update.message.reply_text(self.translate.t("upload photos.end", self.language))
         return ConversationHandler.END
 
     def entry_points(self):

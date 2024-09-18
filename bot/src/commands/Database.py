@@ -10,7 +10,7 @@ class Database:
         self.curr = self.conn.cursor()
 
     def checkPrimaryKey(self, table:str):
-        self.curr.execute(f"SELECT
+        self.curr.execute(f"""SELECT
                             kcu.column_name
                         FROM
                             information_schema.table_constraints AS tc
@@ -21,13 +21,18 @@ class Database:
                         AND
                             tc.table_schema = kcu.table_schema
                         WHERE
-                            tc.constraint_type = 'PRIMARY KEY' AND tc.table_name = {table};")
+                            tc.constraint_type = 'PRIMARY KEY' AND tc.table_name = {table};""")
         return self.curr.fetchone()
 
     def insert(self, table:str, variables:str, values):
-        self.curr.execute(f"INSERT INTO {table} ({variables}) VALUES ({", ".join(f"%s" for _ in range(len(variables)))})
+        command = f"""INSERT INTO {table} ({variables}) VALUES ({", ".join(f"%s" for _ in range(len(variables)))})
                           ON CONFLICT ({self.checkPrimaryKey(table)}) DO UPDATE
-                          SET {", ".join(f"{i} = %s, " for i in variables)};", values * 2)
+                          SET {", ".join(f"{i} = %s, " for i in variables)};"""
+        self.curr.execute(command, values * 2)
         self.conn.commit()
+
+    def select(self, variables:str, table:str, where:str):
+        self.curr.execute(f"SELECT {variables} FROM {table} WHERE {where};")
+        return self.curr.fetchone()[0]
 
     

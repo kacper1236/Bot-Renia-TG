@@ -23,6 +23,7 @@ services:
       - ./photos:/photos
       - ./bot:/bot/
       - ./DatabasePersistenceJson:/DatabasePersistenceJson
+      - ./src/commands/translations:/src/commands/translations
     env_file:
       - path: .env
         required: true

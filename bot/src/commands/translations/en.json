@@ -1,0 +1,17 @@
+{
+    "en":
+    {
+        "successful":
+        {
+            "verified": "You have been successfully verified!"
+        },
+        "commands": "Show all commands",
+        "upload photos": {
+            "help": "Upload photos or videos",
+            "start": "Send a photo you want to save\nTo finish saving write /end",
+            "error": "This is not a photo or video is too big, try again\nTo finish saving write /end",
+            "end": "Finished saving photos"
+        },
+        "verify": "Verify yourself"
+    }
+}

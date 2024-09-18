@@ -6,3 +6,4 @@ pyjwt
 pyjwt[crypto]
 jwcrypto
 psycopg2
+python-i18n

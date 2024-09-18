@@ -43,10 +43,7 @@ class VerifiedUsers(db.Model):
     username = db.Column(db.String(120), unique=False, nullable=False)
     id_username = db.Column(db.Integer, unique=True, nullable=False)
     is_verified = db.Column(db.Boolean, unique=False, nullable=False)
-    room = db.Column(db.Boolean, unique=False, nullable=False)
-    plan_id = db.Column(db.Integer, unique=False, nullable=False)
-    plan_selected = db.Column(db.Integer, unique=False, nullable=False)
-    plan_paid = db.Column(db.Integer, unique=False, nullable=False)
+    prefered_language = db.Column(db.String(3), unique=False, nullable=False)
 
 
 admin.add_view(ModelView(SimpleCommand, db.session))
@@ -92,10 +89,7 @@ def get_list_of_verified_users():
                 'username': user.username,
                 'id_username': user.id_username,
                 'is_verified': user.is_verified,
-                'room': user.room,
-                'plan_id': user.plan_id,
-                'plan_selected': user.plan_selected,
-                'plan_paid': user.plan_paid
+                'prefered_language': user.prefered_language
             } for user in result]
         })
     return "No informations yet"

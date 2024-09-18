@@ -1,0 +1,17 @@
+{
+    "pl":
+    {
+        "successful":
+        {
+            "verified": "Zostałeś pomyślnie zweryfikowany!"
+        },
+        "commands": "Pokaż wszystkie komendy",
+        "upload photos": {
+            "help": "Prześlij zdjęcia lub filmy",
+            "start": "Wyślij zdjęcie, które chcesz zapisać\n Aby zakończyć zapisywanie napisz /end",
+            "error": "To nie jest zdjęcie lub film jest za duży, spróbuj ponownie\n Aby zakończyć zapisywanie napisz /end",
+            "end": "Zakończono zapisywanie zdjęć"
+        },
+        "verify": "Zweryfikuj się"
+    }
+}
