@@ -3,7 +3,6 @@ from telegram.ext import CallbackContext
 from . import SlashCommand, command_with_logs, CommandManager
 from .translations import Translations
 from .Database import Database
-from ..bot.logs import logger
 
 class HelpCommand(SlashCommand):
     translate = Translations()
@@ -17,7 +16,10 @@ class HelpCommand(SlashCommand):
 
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
-        language = self.database.select('prefered_language', 'verified_users', f'id = {update.message.from_user.id}')
+        try:
+            language = self.database.select_one_piece('prefered_language', 'verified_users', f'id = {update.message.from_user.id}')
+        except:
+            language = None
         if language is None:
             language = 'pl'
         if language.lower() == "pl":

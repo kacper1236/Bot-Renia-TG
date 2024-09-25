@@ -10,6 +10,9 @@ class Database:
         self.curr = self.conn.cursor()
 
     def checkPrimaryKey(self, table:str):
+        """
+        check table for primary key
+        """
         self.curr.execute(f"""SELECT
                             kcu.column_name
                         FROM
@@ -26,12 +29,15 @@ class Database:
 
     def insert(self, table:str, variables:str, values):
         command = f"""INSERT INTO {table} ({variables}) VALUES ({", ".join(f"%s" for _ in range(len(variables)))})
-                          ON CONFLICT ({self.checkPrimaryKey(table)}) DO UPDATE
+                          ON CONFLICT (ID) DO UPDATE
                           SET {", ".join(f"{i} = %s, " for i in variables)};"""
         self.curr.execute(command, values * 2)
         self.conn.commit()
 
-    def select(self, variables:str, table:str, where:str):
+    def select_one_piece(self, variables:str, table:str, where:str):
+        """
+        select one piece from table
+        """
         self.curr.execute(f"SELECT {variables} FROM {table} WHERE {where};")
         return self.curr.fetchone()[0]
 

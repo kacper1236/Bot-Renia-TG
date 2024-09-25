@@ -7,6 +7,7 @@ from ..integrations import ReniaBackendClient
 import jwt, base64, requests, json, os
 import jwcrypto.jwk as jwk
 import psycopg2
+from .Database import Database
 
 class Verify(SlashCommand):
     '''
@@ -23,7 +24,6 @@ class Verify(SlashCommand):
     telegramUserID = 0
     conn = psycopg2.connect("postgresql://my_user:my_password@postgres/my_database")
     curr = conn.cursor()
-
     translate = Translations()
 
     def markError(self): 
@@ -100,11 +100,11 @@ class Verify(SlashCommand):
             except:
                 pass
             try:
-                logger.info(data)
                 username = data['displayName']
                 id_username = ID
                 is_verified = True
                 prefered_language = data['language']
+                
                 self.curr.execute(f"""INSERT INTO verified_users (id, username, id_username, is_verified, prefered_language) 
                                   VALUES (%s, %s, %s, %s, %s)
                                   ON CONFLICT (id_username) DO UPDATE
@@ -113,6 +113,7 @@ class Verify(SlashCommand):
                                    self.telegramUserID, username, id_username, is_verified, prefered_language,)) #UPDATE
 
                 self.conn.commit()
+                
                 logger.info("Dane zostały dodane do bazy")
             except Exception as e:
                 raise Exception(f"Błąd podczas dodawania danych do bazy: {e}")
@@ -163,12 +164,11 @@ class Verify(SlashCommand):
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
         try:
-            if context.args[0] == "" or context.args[0] == None:
+            if not context.args or context.args[0] == "" or context.args[0] == None:
                 await update.message.reply_text("No token specified")
                 return 
             self.telegramUserID = update.message.from_user.id
             await self.prepareConnection()
-            await update.message.reply_text(self.currentToken)
             await self.verify(context.args[0], update.message.from_user.name, update.message.from_user.id)
             await self.fetchUserData(self.idUser)
             await update.message.reply_text(self.translate.t('successful.verified', self.language_user(self.telegramUserID)))
