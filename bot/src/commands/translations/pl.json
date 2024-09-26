@@ -10,8 +10,16 @@
             "help": "Prześlij zdjęcia lub filmy",
             "start": "Wyślij zdjęcie, które chcesz zapisać\n Aby zakończyć zapisywanie napisz /end",
             "error": "To nie jest zdjęcie lub film jest za duży, spróbuj ponownie\n Aby zakończyć zapisywanie napisz /end",
-            "end": "Zakończono zapisywanie zdjęć"
+            "end": "Zakończono zapisywanie zdjęć",
+            "not_verify": "Nie jesteś zweryfikowany"
         },
-        "verify": "Zweryfikuj się"
+        "unverify": {
+            "help": "Usunięcie weryfikacji z bota",
+            "start": "Czy aby na pewno chcesz się wyrejestrować?\nJeśli tak, napisz \"tak\"",
+            "end": "Zostałeś pomyślnie wyrejestrowany!",
+            "cancel": "Anulowano wyrejestrowanie",
+            "error": "Nie jesteś zarejestrowany",
+            "not_verify": "Nie jesteś zweryfikowany"
+        }
     }
 }

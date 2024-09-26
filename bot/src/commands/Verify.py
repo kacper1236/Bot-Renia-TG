@@ -113,8 +113,6 @@ class Verify(SlashCommand):
                                    self.telegramUserID, username, id_username, is_verified, prefered_language,)) #UPDATE
 
                 self.conn.commit()
-                
-                logger.info("Dane zostały dodane do bazy")
             except Exception as e:
                 raise Exception(f"Błąd podczas dodawania danych do bazy: {e}")
         except Exception as e:
@@ -166,7 +164,7 @@ class Verify(SlashCommand):
         try:
             if not context.args or context.args[0] == "" or context.args[0] == None:
                 await update.message.reply_text("No token specified")
-                return 
+                return
             self.telegramUserID = update.message.from_user.id
             await self.prepareConnection()
             await self.verify(context.args[0], update.message.from_user.name, update.message.from_user.id)
@@ -192,4 +190,5 @@ class Verify(SlashCommand):
             '''
         except Exception as e:
             self.markEerror()
+            await update.message.reply_text(f"PL: Nie można zweryfikować tokenu, skontaktuj się z administratorem\n EN: Cannot verify token, contact with administrator\n Error code: {e}")
             logger.info(f"Renia napotkała błąd podczas pracy! {e}")

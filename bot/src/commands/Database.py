@@ -40,5 +40,9 @@ class Database:
         """
         self.curr.execute(f"SELECT {variables} FROM {table} WHERE {where};")
         return self.curr.fetchone()[0]
+    
+    def update(self, table:str, variables:str, values:str, where:str):
+        self.curr.execute(f"UPDATE {table} SET {variables} = {values} WHERE {where};")
+        self.conn.commit()
 
     

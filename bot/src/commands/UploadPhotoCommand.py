@@ -23,10 +23,13 @@ class UploadPhotoCommand(ConversationCommand):
     async def start(self, update: Update, context: CallbackContext) -> int:
         try:
             self.language = self.database.select_one_piece('prefered_language', 'verified_users', f'id = {update.message.from_user.id}')
+            if self.database.select_one_piece('is_verified', 'verified_users', f'id = {update.message.from_user.id}') == False:
+                await update.message.reply_text(self.translate.t("upload photos.not_verify", self.language))
+                return ConversationHandler.END
         except:
             await update.message.reply_text("You are not verified user. Please use /verify command to verify yourself.")
             return ConversationHandler.END
-        logger.info(f"Użytkownik {update.message.from_user.id} wywołał komendę /zapisz")
+        logger.info(f"Użytkownik {update.message.from_user.id} wywołał komendę /upload")
         await update.message.reply_text(self.translate.t("upload photos.start", self.language))
         return self.SAVE
 
