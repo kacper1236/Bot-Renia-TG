@@ -30,6 +30,7 @@ class SimpleCommand(db.Model):
     name = db.Column(db.String(120), unique=True, nullable=False)
     value = db.Column(db.String(120), unique=False, nullable=False)
     description = db.Column(db.String(120), unique=False, nullable=False)
+    is_visible = db.Column(db.Boolean, unique=False, nullable=False)
 
 
 class Config(db.Model):
@@ -60,7 +61,8 @@ def get_all_users():
             'result': [{
                 'name': simple_command.name,
                 'text': simple_command.value,
-                'description': simple_command.description
+                'description': simple_command.description,
+                'is_visible': simple_command.is_visible
             } for simple_command in result]
         })
     return "No informations yet"

@@ -3,6 +3,7 @@ from telegram.ext import CallbackContext
 from . import SlashCommand, command_with_logs, CommandManager
 from .translations import Translations
 from .Database import Database
+from ..bot.logs import logger
 
 class HelpCommand(SlashCommand):
     translate = Translations()
@@ -26,7 +27,10 @@ class HelpCommand(SlashCommand):
             tokens = ['Komendy:']
         else:
             tokens = ['Commands:']
+        visible_commands = [command for command, is_visible in self.__manager.is_visible.items() if is_visible]
         for command, description in self.__manager.descriptions.items():
+            if command not in visible_commands:
+                continue
             command_line = [f'/{command}']
             if description is not None:
                 command_line.append(self.translate.t(description, language))

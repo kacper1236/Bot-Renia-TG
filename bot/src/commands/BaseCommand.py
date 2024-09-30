@@ -16,6 +16,8 @@ class BaseCommand(ABC):
     name: str
     '''Nazwa komendy, wykorzystywana do przypisania komendy'''
     description: str = None
+
+    is_visible: bool = True
     '''Krótki opis komendy do /help'''
 
     @abstractmethod
