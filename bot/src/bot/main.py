@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import sys
 from ..integrations import ReniaBackendClient
-from ..commands import CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand, DatabasePersistence, Verify, Unverify
+from ..commands import CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand, DatabasePersistence, Verify, Unverify, Say
 from .logs import logger, error
 
 def main():
@@ -18,6 +18,7 @@ def main():
             HowMuchTimeLeftCommand(),
             Verify(),
             Unverify(),
+            Say(),
             *ReniaBackendClient.get_commands()
         ]
         if ReniaBackendClient.should_enable_photo_command() == '1':

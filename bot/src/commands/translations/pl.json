@@ -20,6 +20,12 @@
             "cancel": "Anulowano wyrejestrowanie",
             "error": "Nie jesteś zarejestrowany",
             "not_verify": "Nie jesteś zweryfikowany"
+        },
+        "say": {
+            "help": "Mów jako bot",
+            "start": "Możesz teraz mówić jako bot i wszystko zostanie przesłane na odpowienią grupę\n Aby zakończyć napisz /end",
+            "end": "Zakończono mówienie jako bot",
+            "wrong_password": "Błędne hasło"
         }
     }
 }

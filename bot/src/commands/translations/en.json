@@ -20,6 +20,12 @@
             "cancel": "Unregistering canceled",
             "error": "You are not registered",
             "not_verify": "You are not verified"
+        },
+        "say": {
+            "help": "Speak as a bot",
+            "start": "You can now speak as a bot and everything will be sent to the appropriate group\n To finish write /end",
+            "end": "Finished speaking as a bot",
+            "wrong_password": "Wrong password"
         }
     }
 }

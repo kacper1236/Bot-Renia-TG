@@ -9,3 +9,4 @@ from .Verify import *
 from .translations import *
 from .Database import *
 from .Unverify import *
+from .Say import *
