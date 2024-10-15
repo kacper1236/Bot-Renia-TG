@@ -17,6 +17,7 @@ class Verify(SlashCommand):
     description = "verify"
 
     link: str = os.environ.get("LINK")
+    renia: str = os.environ.get("RENIA")
 
     currentToken = ""
     errors = 0
@@ -63,7 +64,7 @@ class Verify(SlashCommand):
                         jwt.exceptions.ImmatureSignatureError) as e:
                     raise Exception(e)
                 except Exception as e:
-                    logger.info(repr(e))
+                    raise Exception(e)
             if not isFailure:
                 self.currentToken = token
                 self.errors = 0
@@ -92,7 +93,7 @@ class Verify(SlashCommand):
         if ID.__class__ == dict:
             return self.matchErrrorsInResponse()
         try:
-            data = requests.get(f"{self.link}/app/event/*/bot/profile/{ID}", 
+            data = requests.get(f"{self.link}/{self.renia}/profile/{ID}", 
                                 headers = {"Authorization": f"Bearer {self.currentToken}"}).json()
             try:
                 if data.status_code != 200:
@@ -143,7 +144,7 @@ class Verify(SlashCommand):
 
     async def verify(self, token, name, ID):
         try:
-            self.idUser = requests.post(f"{self.link}/app/event/*/bot/verify/telegram", 
+            self.idUser = requests.post(f"{self.link}/{self.renia}/verify/telegram",
                               json = {"token": token, "name": name, "id": ID}, 
                               headers = {"Authorization": f"Bearer {self.currentToken}"}).json()
             if self.idUser.__class__ == int:
@@ -170,25 +171,8 @@ class Verify(SlashCommand):
             await self.verify(context.args[0], update.message.from_user.name, update.message.from_user.id)
             await self.fetchUserData(self.idUser)
             await update.message.reply_text(self.translate.t('successful.verified', self.language_user(self.telegramUserID)))
-            '''
-                1. User podał /api <token foxconsów>
-                    zapisujemy sobie token do pamięci i przechodzimy kroku VERIFY
-                2. User podał /api ale bez tokenu (conversation handler)
-                    przechodzimy do proszenia usera o wklejenie tokenu
-                    przyjmujemy jego token i zapisujemy i przechodzi do kroku VERIFY
-
-                VERIFY. 
-                    wysyłamy na {url}/app/event/*/bot/verify/telegram [PUT] info o userze {token, name, id}, token to wysłany token przez usera, name to @ usera, id to id usera w tg
-                    foxcons odpowie <id> - id usera w foxcons
-
-                FETCH USER DATA.
-                    wysyłamy na {url}/app/event/*/bot/profile/<id> [GET]
-                    foxcons odpowie: (tymczasowo tylko tyle - potem jeszcze dodatkowe dane - jak np stan płatności etc)
-                    {
-                        id: number;
-                    }
-            '''
+            logger.info(f"Użytkownik {update.message.from_user.id} został zweryfikowany")
         except Exception as e:
-            self.markEerror()
             await update.message.reply_text(f"PL: Nie można zweryfikować tokenu, skontaktuj się z administratorem\n EN: Cannot verify token, contact with administrator\n Error code: {e}")
+            self.markEerror()
             logger.info(f"Renia napotkała błąd podczas pracy! {e}")

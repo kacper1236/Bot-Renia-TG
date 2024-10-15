@@ -5,5 +5,5 @@ py-mon
 pyjwt
 pyjwt[crypto]
 jwcrypto
-psycopg2
+psycopg2-binary
 python-i18n
