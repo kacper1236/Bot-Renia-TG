@@ -13,4 +13,7 @@ class HowMuchTimeLeftCommand(SlashCommand):
         event_date_str = requests.get('https://futrolajki.pl/app/event/info').json()['eventDate']
         event_date = datetime.datetime.strptime(event_date_str, "%Y-%m-%d").date()
         days_left = (event_date - datetime.date.today()).days
-        await update.message.reply_text(f'Do Futrołajek zostało {days_left} dni')
+        if days_left <= 0:
+            await update.message.reply_text(f"Konwent już się rozpoczął")
+        else:
+            await update.message.reply_text(f'Do Futrołajek zostało {days_left} dni')
