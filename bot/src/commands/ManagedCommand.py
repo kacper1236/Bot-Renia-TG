@@ -10,10 +10,11 @@ class ManagedCommand(SlashCommand):
     Komenda ustawiana poprzes UI Administratorskie
     '''
     
-    def __init__(self, name: str, text: str, description: str) -> None:
+    def __init__(self, name: str, text: str, description: str, is_visible:bool) -> None:
         self.name = name
         self.text = text
         self.description = description
+        self.is_visible = is_visible
 
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):

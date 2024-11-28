@@ -1,0 +1,31 @@
+{
+    "en":
+    {
+        "successful":
+        {
+            "verified": "You have been successfully verified!"
+        },
+        "commands": "Show all commands",
+        "upload photos": {
+            "help": "Upload photos or videos",
+            "start": "Send a photo you want to save\nTo finish saving write /end",
+            "error": "This is not a photo or video is too big, try again\nTo finish saving write /end",
+            "end": "Finished saving photos",
+            "not_verify": "You are not verified"
+        },
+        "unverify": {
+            "help": "Unregister from the bot",
+            "start": "Are you sure you want to unregister?\nIf so, write \"yes\"",
+            "end": "You have been successfully unregistered!",
+            "cancel": "Unregistering canceled",
+            "error": "You are not registered",
+            "not_verify": "You are not verified"
+        },
+        "say": {
+            "help": "Speak as a bot",
+            "start": "You can now speak as a bot and everything will be sent to the appropriate group\n To finish write /end",
+            "end": "Finished speaking as a bot",
+            "wrong_password": "Wrong password"
+        }
+    }
+}
