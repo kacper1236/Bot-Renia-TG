@@ -42,7 +42,7 @@ class Say(ConversationCommand):
     async def end(self, update: Update, context: CallbackContext) -> int:
         try:
             await update.message.reply_text(self.translate.t("say.end", self.language))
-        except Exception as e:
+        except Exception:
             await update.message.reply_text(self.translate.t("say.end", "pl"))
         return ConversationHandler.END
 
