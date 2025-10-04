@@ -1,20 +1,14 @@
-# Use the official Python image as the base image
-FROM nikolaik/python-nodejs:python3.12-nodejs22
-# FROM python:3.9-slim
+FROM python:3.13-slim
 
-# Set the working directory in the container
+# Install Node.js (example: Node 22)
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g nodemon && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /bot
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt && pip install --upgrade certifi
 
-COPY requirements.txt  /bot
-
-# Install dependencies
-RUN pip install --no-cache-dir -r ./requirements.txt                   
-
-# Install nodemon globally
-RUN npm install -g nodemon
-
-# Copy the application files to the container
-# COPY . /bot
-
-# Command to run the application
 CMD ["nodemon", "-L", "--exec", "python", "main.py"]

@@ -1,7 +1,6 @@
-Flask~=3.0.2
+Flask
 flask_admin
 psycopg2-binary
 flask_sqlalchemy
-gunicorn~=22.0.0
-flask_basicauth~=0.2.0
-i18n
+gunicorn
+flask_basicauth

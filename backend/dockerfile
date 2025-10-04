@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM python:3.9-alpine
+FROM python:3.14-rc-alpine3.22
 
 # Set the working directory in the container
 WORKDIR /app
@@ -13,6 +13,7 @@ RUN \
     apk add --no-cache postgresql-libs && \
     apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
     pip install --no-cache-dir -r ./requirements.txt --no-cache-dir && \
+    pip install --upgrade certifi && \
     apk --purge del .build-deps
 
 # Expose the port the application runs on

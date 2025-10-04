@@ -1,0 +1,22 @@
+# Use the official Python image as the base image
+FROM nikolaik/python-nodejs:python3.13-nodejs24-bullseye
+# FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /bot
+
+COPY requirements.txt  /bot
+
+# Install dependencies
+RUN \ 
+    pip install --no-cache-dir -r ./requirements.txt && \
+    pip install --upgrade certifi
+
+# Install nodemon globally
+RUN npm install -g nodemon
+
+# Copy the application files to the container
+# COPY . /bot
+
+# Command to run the application
+CMD ["nodemon", "-L", "--exec", "python", "main.py"]
