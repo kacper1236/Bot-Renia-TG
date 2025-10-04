@@ -5,3 +5,8 @@ from .HowMuchTimeLeftCommand import *
 from .CommandManager import *
 from .UploadPhotoCommand import *
 from .DatabasePersistence import *
+from .Verify import *
+from .translations import *
+from .Database import *
+from .Unverify import *
+from .Say import *

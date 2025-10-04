@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM nikolaik/python-nodejs:latest
+FROM nikolaik/python-nodejs:python3.12-nodejs22
 # FROM python:3.9-slim
 
 # Set the working directory in the container

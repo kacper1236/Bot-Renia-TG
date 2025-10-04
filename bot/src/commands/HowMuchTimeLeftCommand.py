@@ -4,7 +4,6 @@ from . import command_with_logs, SlashCommand
 import requests
 import datetime
 
-
 class HowMuchTimeLeftCommand(SlashCommand):
     name = 'ileDoFutrolajek'
 
