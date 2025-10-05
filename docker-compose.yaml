@@ -9,7 +9,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
       - ./initdb:/docker-entrypoint-initdb.d  # Mount the initdb directory
   renia-tg-bot:
     restart: always
@@ -40,3 +40,6 @@ services:
         required: true
     depends_on:
       - postgres
+
+volumes:
+  pgdata: {}

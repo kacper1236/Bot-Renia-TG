@@ -15,6 +15,7 @@ class Verify(SlashCommand):
     '''
     name = "verify"
     description = "verify"
+    is_visible = False
 
     link: str = os.environ.get("LINK")
     renia: str = os.environ.get("RENIA")

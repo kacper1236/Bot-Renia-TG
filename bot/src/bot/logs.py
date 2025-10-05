@@ -2,7 +2,7 @@ import logging.config
 
 from telegram import Update
 from telegram.ext import CallbackContext
-import traceback #https://docs.python.org/3/library/traceback.html standardowa bibliotka pythona
+import traceback
 
 
 # jak potrzebne będzie coś bardziej customowe
@@ -28,7 +28,11 @@ logging_config = {
         }
     },
     "loggers": {
-        "root": {"level": "DEBUG", "handlers": ["stdout", "file"]}
+        "root": {"level": "INFO", "handlers": ["stdout", "file"]},
+        "httpx": {"level": "WARNING", "handlers": ["stdout", "file"], "propagate": False},
+        "httpcore": {"level": "WARNING", "handlers": ["stdout", "file"], "propagate": False},
+        "telegram": {"level": "WARNING", "handlers": ["stdout", "file"], "propagate": False},
+        "telegram.ext": {"level": "WARNING", "handlers": ["stdout", "file"], "propagate": False},
     }
 }
 

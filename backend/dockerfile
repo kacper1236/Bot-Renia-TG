@@ -4,17 +4,17 @@ FROM python:3.14-rc-alpine3.22
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the application files to the container
+COPY requirements.txt /app/requirements.txt
+
 COPY . /app
 RUN chmod +x /app/start_server.sh
 
-# Install dependencies
-RUN \
-    apk add --no-cache postgresql-libs && \
+RUN apk add --no-cache postgresql-libs && \
     apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
-    pip install --no-cache-dir -r ./requirements.txt --no-cache-dir && \
+    pip install --no-cache-dir -r /app/requirements.txt && \
     pip install --upgrade certifi && \
     apk --purge del .build-deps
+
 
 # Expose the port the application runs on
 EXPOSE 5001

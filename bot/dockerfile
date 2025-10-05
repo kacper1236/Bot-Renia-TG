@@ -1,14 +1,22 @@
 FROM python:3.13-slim
 
-# Install Node.js (example: Node 22)
-RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g nodemon && \
-    rm -rf /var/lib/apt/lists/*
-
 WORKDIR /bot
 COPY requirements.txt ./
+
+# Install Node.js (example: Node 22)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    libffi-dev \
+    python3-dev \
+    curl \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && npm install -g nodemon \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN pip install --no-cache-dir -r requirements.txt && pip install --upgrade certifi
+
+COPY . /bot
 
 CMD ["nodemon", "-L", "--exec", "python", "main.py"]

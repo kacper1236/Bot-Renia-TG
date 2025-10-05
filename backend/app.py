@@ -4,7 +4,7 @@ from flask_basicauth import BasicAuth
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask import request
+from flask import request, redirect, url_for
 import os
 
 # Create a Flask application
@@ -21,6 +21,8 @@ app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = 'super secret key'
 db = SQLAlchemy()
+
+db.init_app(app)
 
 admin = Admin(app)
 
@@ -50,11 +52,14 @@ class VerifiedUsers(db.Model):
 admin.add_view(ModelView(SimpleCommand, db.session))
 admin.add_view(ModelView(Config, db.session))
 admin.add_view(ModelView(VerifiedUsers, db.session))
-db.init_app(app)
 
+
+@app.route('/')
+def route():
+    return redirect('/admin')
 
 @app.route('/simple-commands')
-def get_all_users():
+def get_simple_commands():
     result = db.session.query(SimpleCommand).all()
     if result is not None:
         return json.dumps({
@@ -68,7 +73,7 @@ def get_all_users():
     return "No informations yet"
 
 @app.route('/simple-commands/<name>')
-def get_users(name):
+def get_simple_command(name):
     result = db.session.query(SimpleCommand).filter_by(name=name).first()
     if result is not None:
         return result.value

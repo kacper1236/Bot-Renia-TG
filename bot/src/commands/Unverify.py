@@ -13,6 +13,7 @@ class Unverify(ConversationCommand):
 
     name = "unverify"
     description = "unverify.help"
+    is_visible = False
 
     filter = filters.TEXT
 

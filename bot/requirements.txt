@@ -1,9 +1,9 @@
 python-telegram-bot
 python-dotenv
 requests
+psycopg2-binary
 py-mon
 pyjwt
 pyjwt[crypto]
 jwcrypto
-psycopg2-binary
 python-i18n
