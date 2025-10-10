@@ -7,3 +7,4 @@ pyjwt
 pyjwt[crypto]
 jwcrypto
 python-i18n
+certifi

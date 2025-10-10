@@ -6,6 +6,7 @@ import datetime
 
 class HowMuchTimeLeftCommand(SlashCommand):
     name = 'ileDoFutrolajek'
+    description = 'Ile dni zostało do Futrołajek?'
 
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):

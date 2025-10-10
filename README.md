@@ -21,6 +21,7 @@ USERNAME=admin
 PASSWORD=admin
 ISS = <link from jwk>
 ```
+Full list of variables is in `.env.sample`
 
 ## Running
 
@@ -28,6 +29,7 @@ If you have makefile configured, run `make start`. You can individually build an
 
 1. First:
 ```
+docker build -t bot-renia:latest . # is required for build own image
 docker-compose build
 ```
 2. Then

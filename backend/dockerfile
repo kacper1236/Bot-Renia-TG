@@ -1,5 +1,5 @@
-# Use the official Python image as the base image
-FROM python:3.14-rc-alpine3.22
+#use local image as base
+FROM bot-renia:latest
 
 # Set the working directory in the container
 WORKDIR /app
@@ -9,12 +9,11 @@ COPY requirements.txt /app/requirements.txt
 COPY . /app
 RUN chmod +x /app/start_server.sh
 
-RUN apk add --no-cache postgresql-libs && \
-    apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
-    pip install --no-cache-dir -r /app/requirements.txt && \
-    pip install --upgrade certifi && \
-    apk --purge del .build-deps
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    pip install --upgrade -r /app/requirements.txt --use-pep517 --use-feature=fast-deps
 
+COPY . /app
 
 # Expose the port the application runs on
 EXPOSE 5001
