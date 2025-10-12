@@ -1,7 +1,7 @@
 from typing import List, Dict
-from telegram.ext import Application, BaseHandler, MessageHandler
+from telegram.ext import Application, BaseHandler
 from . import BaseCommand
-
+from ..bot.logs import logger
 
 class CommandManager:
 
@@ -35,7 +35,15 @@ class CommandManager:
             
     def remove_command(self, name: str):
         '''Usunięcie komendy'''
-        self.__app.remove_handler(self.handlers[name])
-        self.handlers.pop(name)
-        self.descriptions.pop(name)
-        self.is_visible.pop(name)
+        try:
+            self.__app.remove_handler(self.handlers[name])
+            self.handlers.pop(name)
+            self.descriptions.pop(name)
+            self.is_visible.pop(name)
+        except KeyError:
+            logger.info(f"Nie można usunąć komendy {name}, nie istnieje")
+        
+    async def get_commands(self) -> List[str]:
+        '''Zwraca listę nazw komend które bot obsługuje aktualnie'''
+        return [cmd.command for cmd in await self.__app.bot.get_my_commands()]
+        

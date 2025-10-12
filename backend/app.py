@@ -77,7 +77,7 @@ def get_simple_command(name):
     result = db.session.query(SimpleCommand).filter_by(name=name).first()
     if result is not None:
         return result.value
-    return "No information yet"
+    return "" #empty response if command not found
 
 @app.route('/configs/<name>')
 def get_config(name):

@@ -5,7 +5,7 @@ import requests
 import datetime
 
 class HowMuchTimeLeftCommand(SlashCommand):
-    name = 'ileDoFutrolajek'
+    name = 'iledofutrolajek'
     description = 'Ile dni zostało do Futrołajek?'
 
     @command_with_logs

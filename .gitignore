@@ -7,3 +7,4 @@ pgdata/
 photos/
 photos/*
 DatabasePersistenceJson\conversation.json
+.vscode/
