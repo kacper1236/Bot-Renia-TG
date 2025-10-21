@@ -51,6 +51,6 @@ def error(update: Update, context: CallbackContext) -> None:
     context
         Obiekt `telegram.ext.CallbackContext`, który zawiera głównie podane argumenty.
     """
-    tb = traceback.format_exception(etype=type(context.error), value=context.error, tb=context.error.__traceback__)
+    tb = traceback.format_exception(context.error)
     error_message = ''.join(tb)
     logger.error(f'Błąd: {error_message}')
