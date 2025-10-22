@@ -40,7 +40,7 @@ logging.config.dictConfig(logging_config)
 
 logger = logging.getLogger('renia-bot')
 
-def error(update: Update, context: CallbackContext) -> None:
+async def error(update: Update, context: CallbackContext) -> None:
     """
     Handler obsługujący błędy.
 
