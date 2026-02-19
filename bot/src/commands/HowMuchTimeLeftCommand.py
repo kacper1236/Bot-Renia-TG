@@ -3,6 +3,7 @@ from telegram.ext import CallbackContext
 from . import command_with_logs, SlashCommand
 import requests
 import datetime
+from json import JSONDecodeError
 
 class HowMuchTimeLeftCommand(SlashCommand):
     name = 'iledofutrolajek'
@@ -10,7 +11,10 @@ class HowMuchTimeLeftCommand(SlashCommand):
 
     @command_with_logs
     async def callback(self, update: Update, context: CallbackContext):
-        event_date_str = requests.get('https://futrolajki.pl/app/event/info').json()['eventDate']
+        try:
+            event_date_str = requests.get('https://futrolajki.pl/app/event/info').json()['eventDate']
+        except JSONDecodeError:
+            return await update.message.reply_text(f'Nie udało się pobrać daty konwentu :(') 
         event_date = datetime.datetime.strptime(event_date_str, "%Y-%m-%d").date()
         days_left = (event_date - datetime.date.today()).days
         match days_left:
