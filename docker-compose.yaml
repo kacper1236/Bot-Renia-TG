@@ -2,6 +2,7 @@ services:
   postgres:
     image: postgres:17
     container_name: my-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_DB: my_database
       POSTGRES_USER: my_user
