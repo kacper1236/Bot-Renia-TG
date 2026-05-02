@@ -7,7 +7,6 @@ from ..integrations import ReniaBackendClient
 import jwt, base64, requests, json, os
 import jwcrypto.jwk as jwk
 import psycopg2
-from .Database import Database
 
 class Verify(SlashCommand):
     '''

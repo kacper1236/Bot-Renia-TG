@@ -117,5 +117,3 @@ class DatabasePersistence(BasePersistence):
         if user_id not in self.user_data:
             self.user_data[user_id] = {}
         self.user_data[user_id].update(user_data)
-
-        #{"zdjecia": {"(553091064, 553091064)": "ZAPISZ_ZDJECIA", "(790850239, 790850239)": "ZAPISZ_ZDJECIA"}}

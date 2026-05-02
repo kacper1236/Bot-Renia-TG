@@ -4,7 +4,6 @@ from . import SlashCommand, command_with_logs
 from ..bot.logs import logger
 from ..integrations import ReniaBackendClient
 
-
 class ManagedCommand(SlashCommand):
     '''
     Komenda ustawiana poprzes UI Administratorskie
@@ -20,6 +19,6 @@ class ManagedCommand(SlashCommand):
     async def callback(self, update: Update, context: CallbackContext):
         try:
             await update.message.reply_text(ReniaBackendClient.get_simple_command_response(self.name))
-        except Exception:
-            logger.exception("Renia napotkała błąd podczas pracy!")
+        except Exception as e:
+            logger.exception(f"Renia napotkała błąd podczas wykoniania komendy {self.name}: {e}")
             

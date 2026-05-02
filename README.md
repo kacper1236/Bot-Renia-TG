@@ -75,3 +75,6 @@ To execute tests, run `make test`. The test will ask you for you to log in and i
 # Common problems
 ## Backend not starting: `exec ./start_server.sh: no such file or directory`
 Make sure the `backend/dockerfile` and `backend/start_server.sh` files has **LF** separator set 
+
+## Error "Chat not found" on /say
+Use web.telegram.org to search exact ID for your channel and copy it to `.env`. Eg. -1001234567890, -1234567890, -123456789, -100123456789

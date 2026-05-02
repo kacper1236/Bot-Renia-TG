@@ -17,9 +17,9 @@ class Reload(SlashCommand):
 
     @command_with_logs
     async def callback(self, update, context):
-        '''Reload commands from backend
+        '''
+        Reload commands from backend
         This command will fetch commands from backend and add new ones to the bot
-        TO DO: This command does not remove old commands, only adds new ones
         '''
         
         list_commands = await self.__manager.get_commands()

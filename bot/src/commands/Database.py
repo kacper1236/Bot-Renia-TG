@@ -1,7 +1,6 @@
 import psycopg2
 
 class Database:
-
     conn = None
     curr = None
 
