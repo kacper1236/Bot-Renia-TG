@@ -14,7 +14,7 @@ class Report(SlashCommand):
             return await update.message.reply_text("Aby zgłosić wiadomość, musisz na nią odpowiedzieć")
 
         json = {
-            'user': f"@{update.message.from_user.username}",
+            'user': f"@{update.message.reply_to_message.from_user.username}",
             'message': (
                 update.message.reply_to_message.text
                 or "Wiadomość nie jest tekstem, należy zobaczyć"
