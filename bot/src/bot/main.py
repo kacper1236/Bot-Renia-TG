@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import sys
 from ..integrations import ReniaBackendClient
-from ..commands import CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand, DatabasePersistence, Verify, Unverify, Say, Reload
+from ..commands import CommandManager, HelpCommand, UploadPhotoCommand, HowMuchTimeLeftCommand, DatabasePersistence, Verify, Unverify, Say, Reload, Report
 from .logs import logger, error
 
 persistence = DatabasePersistence()
@@ -18,6 +18,7 @@ static_commands = [
     Unverify(),
     Say(),
     Reload(manager),
+    Report(),
 ]
 
 if ReniaBackendClient.should_enable_photo_command() == '1':

@@ -11,3 +11,4 @@ from .Database import *
 from .Unverify import *
 from .Say import *
 from .Reload import *
+from .Report import *

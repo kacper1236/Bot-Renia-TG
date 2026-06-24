@@ -9,9 +9,9 @@ CREATE TABLE simple_command (
 
 -- Insert initial data into the simple_command table
 INSERT INTO simple_command (name, value, description, is_visible) VALUES
-    ('date', '13–17.11.2024', 'Data futrołajek', TRUE),
+    ('date', '11.11.2026 - 15.11.2026', 'Data futrołajek', TRUE),
     ('website', 'https://futrolajki.pl/', 'Strona konwentu', TRUE),
-    ('program', 'https://futrolajki.pl/', 'Program konwentu', TRUE),
+    ('program', 'https://futrolajki.pl/page/program', 'Program konwentu', TRUE),
     ('test2', 'testing2', 'Test command 2', FALSE);
 
 -- Create the config table
