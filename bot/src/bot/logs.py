@@ -1,9 +1,8 @@
 import logging.config
-
+from telegram.error import NetworkError
 from telegram import Update
 from telegram.ext import CallbackContext
 import traceback
-
 
 # jak potrzebne będzie coś bardziej customowe
 logging_config = {
@@ -51,6 +50,9 @@ async def error(update: Update, context: CallbackContext) -> None:
     context
         Obiekt `telegram.ext.CallbackContext`, który zawiera głównie podane argumenty.
     """
-    tb = traceback.format_exception(context.error)
-    error_message = ''.join(tb)
-    logger.error(f'Błąd: {error_message}')
+    if isinstance(context.error, (NetworkError)):
+        logger.error(f'Błąd sieci: {context.error}')
+    else:
+        tb = traceback.format_exception(context.error)
+        error_message = ''.join(tb)
+        logger.error(f'Błąd: {error_message}')
